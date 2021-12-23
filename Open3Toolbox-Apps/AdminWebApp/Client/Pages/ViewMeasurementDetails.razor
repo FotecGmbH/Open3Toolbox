@@ -1,0 +1,90 @@
+﻿@page "/sensorstatistics/measurement"
+@page "/sensorstatistics/measurement/{Id:int}"
+
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Model.Statistics
+@using Exchange.Resources.ResStatistics
+
+@inherits ProjectRazorPage<VmMeasurementDetails>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewMeasurementDetails.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-xl p-0">
+                <div class="d-flex flex-row flex-nowrap">
+                    <button class="btn btn-dark my-2"
+                            @onclick="() => this.ViewModel.CmdGoBack.Execute(null)">
+                        <span class="d-flex flex-row flex-nowrap align-items-center">
+                            @IconProvider.RenderBackArrow(2, 2)
+                        </span>
+                    </button>
+                    @*<BreadCrumbsComponent Class="mt-3 mr-3 w-100" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Id</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Index</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Name</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Data.Name</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Description</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Data.Description</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewMeasurementDetails.Field_Port</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Data.Port</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewMeasurementDetails.Field_Value</h3>
+            @if (this.ViewModel.MeasurementDetails.Data.LastMeasured is null)
+            {
+                <span>
+                    <strong class="text-danger">@ResViewMeasurementDetails.NoData</strong>
+                    <span class="mx-2" />
+                    <button class="btn btn-primary"
+                            @onclick="() => this.ViewModel.CmdRefreshData.Execute(null)">
+                        <span class="d-flex flex-row flex-nowrap align-items-center">
+                            @IconProvider.RenderRefreshIcon()
+                            <span class="mx-1" />
+                            @this.ViewModel.CmdRefreshData.DisplayName
+                        </span>
+                    </button>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <strong>@this.ViewModel.MeasurementDetails.Data.LastMeasuredValue</strong>
+                    <span class="mx-1" />
+                    @ResViewMeasurementDetails.Date_From
+                    <strong>@this.ViewModel.MeasurementDetails.Data.LastMeasured.ToString()</strong>
+                    <span class="mx-2" />
+                    <button class="btn btn-secondary"
+                            @onclick="() => this.ViewModel.CmdToHistory.Execute(null)">
+                        <span class="d-flex flex-row flex-nowrap align-items-center">
+                            @IconProvider.RenderHistoryIcon()
+                            <span class="mx-1" />
+                            @this.ViewModel.CmdToHistory.DisplayName
+                        </span>
+                    </button>
+                </span>
+            }
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewMeasurementDetails.Field_Interval</h3>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+}

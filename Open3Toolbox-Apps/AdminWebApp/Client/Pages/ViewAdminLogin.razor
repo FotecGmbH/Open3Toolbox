@@ -1,0 +1,53 @@
+﻿@page "/login"
+
+@using Exchange.Resources.ResAdminApps
+
+@inherits ProjectRazorPage<VmAdminLogin>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title=@ResViewAdminLogin.Title>
+
+<div class="gridContainer individualGridContainer">
+    <label for="username" class="m-3">@ResViewAdminLogin.Lbl_Username</label>
+    <div class="m-3">
+        <TelerikTextBox Id="username" @bind-Value="ViewModel.LoginName"/>
+    </div>
+    
+    <label for="password" class="m-3">@ResViewAdminLogin.Lbl_Password</label>
+    <div class="m-3">
+        <TelerikTextBox Password="true" Id="password" @bind-Value="ViewModel.PasswordPlaintext"/>
+    </div>
+
+    <button class="btn btn-primary m-3 loginButton" type="button" @onclick="@(() => ViewModel.CmdLogin.Execute(null))">
+        @if (ViewModel.IsBusy)
+        {
+        <span class="spinner-border spinner-border-sm loginSpinner" role="status" aria-hidden="true"></span>
+        }
+        @ViewModel.CmdLogin.DisplayName
+    </button>
+</div>
+</CardContainer>
+
+<style>
+    .individualGridContainer {
+        grid-template-rows: repeat(3, max-content);
+        grid-template-columns: max-content auto;
+    }
+
+    .loginButton {
+        width: 150px;
+        grid-column-start: 2;
+    }
+
+    .loginSpinner {
+        margin-right: 5px;
+    }
+</style>
+
+
+@code {
+
+}

@@ -1,0 +1,53 @@
+﻿@page "/projectPublisher"
+@page "/projectPublisher/{Id:int}"
+
+@inherits ProjectRazorPage<BaseApp.ViewModel.ConfigurationTool.VmProjectPublisher>
+
+@using Exchange.Resources.ResConfigurationTool
+@using Exchange.Model.ConfigurationTool
+@using Biss.Dc.Client
+@using AdminWebApp.Client.Components
+
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<ToastControl Item="@Toast"></ToastControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+
+<CardContainer Title="@ResViewProjectPublisher.Title">
+    <div class="container-fluid">
+        <div class="row mb-5">
+            <h2>@ResViewProjectPublisher.Publish: <strong>@this.ViewModel.Project.Name</strong></h2>
+        </div>
+        <div class="row my-2">
+            <strong>@ResViewProjectPublisher.CurrentlyPublished</strong>
+            <span class="mx-1" />
+            <div style="background-color: @(this.ViewModel.IsPublished ? "green" : "red"); width: 1.5em; height: 1.5em; border-radius: 50%;"></div> @*To Implement*@
+        </div>
+        <div class="row my-2">
+            <strong>
+                @ResViewProjectPublisher.CurrentlyPublishedVersion
+            <span class="mx-1" />
+            1.3.2@*To Implement*@
+            </strong>
+        </div>
+        <div class="row my-2">
+            <select class="form-control">
+                @*To Implement*@
+            </select>
+        </div>
+        <div class="row my-2">
+            <button class="btn btn-success">
+                <span class="d-flex flex-row flex-nowrap align-items-center">
+                    @IconProvider.RenderFilledPlusIcon()
+                    <span class="mx-1" />
+                    @ResViewProjectPublisher.AddNewVersion
+                </span>
+            </button>
+        </div>
+        <div class="row mb-2 mt-5 d-flex justify-content-center">
+            <button @onclick="@(() => this.ViewModel.CmdPublishProject.Execute(null))" class="btn btn-primary">
+                @this.ViewModel.CmdPublishProject.DisplayName
+            </button>
+        </div>
+    </div>
+</CardContainer>

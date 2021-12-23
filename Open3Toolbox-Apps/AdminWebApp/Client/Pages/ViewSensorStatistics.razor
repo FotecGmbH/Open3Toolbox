@@ -1,0 +1,46 @@
+﻿@page "/sensorstatistics"
+
+@using Biss.Dc.Client
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Resources.ResStatistics
+@using Exchange.Model.Statistics
+
+@inherits ProjectRazorPage<VmSensorStatistics>
+
+@inject DialogService DialogService
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewSensorStatistics.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl my-2 mb-2 pb-2 border-bottom border-dark">
+                <h1 class="text-center">@ResViewSensorStatistics.MyViews</h1>
+            </div>
+        </div>
+        <div class="row scrollable-v-lg">
+            <SubViewGridComponent SubViews="this.ViewModel.SubViews" CmdDelete="this.ViewModel.CmdRemoveSubView" CmdVisit="this.ViewModel.CmdVisitSubView" />
+        </div>
+        <div class="row justify-content-start">
+            <span class="w-50 d-flex flex-row flex-nowrap align-items-center">
+                <button class="btn btn-success my-2" 
+                        @onclick="@(() => this.ViewModel.CmdAddSubView.Execute(this._toAdd))" 
+                        disabled="@(this._toAdd is null)">
+                    <span class="d-flex flex-row flex-nowrap align-items-center">
+                        @IconProvider.RenderFilledPlusIcon()
+                    </span>
+                </button>
+                <span class="mx-1" />
+                <RadzenDropDown Data="this.ViewModel.GetSubViewOptions()" @bind-Value="this._toAdd"/>
+            </span>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+    private IVmSubView _toAdd = null!;
+}

@@ -1,0 +1,865 @@
+﻿@page "/"
+@page "/home"
+@page "/databaseuser"
+@using Microsoft.EntityFrameworkCore
+@using WebServer.Models
+@using Database.Tables
+@using Exchange.Resources
+@using System.Globalization
+@using Biss.Apps.Service.Push
+@using Database
+@using WebServer.Resources
+@using System.Collections.ObjectModel
+@using Biss.Collections
+@using Biss.Log.Producer
+@using Exchange.Model
+@using Microsoft.Extensions.Logging
+@using Database.Context
+@using WebExchange  
+@*@attribute [Authorize]*@
+
+@inject LoginModel User
+@inject NavigationManager NavigationManager
+
+
+<h1>@ResViewDatabaseUser.PageDescription</h1>
+
+<br />
+<br />
+
+<p>@ResViewDatabaseUser.UserInformation</p>
+
+<!--Send Sms to all available user and devices-->
+<button class="btn btn-primary" type="button" @onclick="@(() => ShowSmsWindow())">
+    <TelerikIcon Icon="@IconName.Email" />
+    @ResViewDatabaseUser.Btn_SendSmsToAll
+</button>
+
+<!--Send push to all available user and devices-->
+<button class="btn btn-primary" type="button" @onclick="@(() => ShowPushWindow())">
+    <TelerikIcon Icon="@IconName.Notification" />
+    @ResViewDatabaseUser.Btn_SendPushToAll
+</button>
+
+<!--Send Dc to all available user and devices-->
+<button class="btn btn-primary" type="button" @onclick="@(() => ShowDcWindow())">
+    <TelerikIcon Icon="@IconName.Connector" />
+    @ResViewDatabaseDevices.Btn_SendDcToAll
+</button>
+
+
+<!--Grid zu Darstellung der aktuellen Benutzer-->
+<TelerikGrid Height="70vh" Data="_clients" FilterMode="GridFilterMode.FilterMenu" Sortable="true" Resizable="true">
+    <GridToolBar>
+        <GridSearchBox />
+    </GridToolBar>
+    <DetailTemplate>
+        @{
+            if (context is TableUser currentUser)
+            {
+                <TelerikGrid Data="@currentUser.TblDevices" Sortable="true" FilterMode="GridFilterMode.FilterMenu">
+                    <GridToolBar>
+                        <GridSearchBox />
+                    </GridToolBar>
+                    <GridColumns>
+                        <GridColumn Field="@nameof(TableDevice.Id)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_Id
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.Id
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.Plattform)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Platform
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.Plattform
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.OperatingSystemVersion)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @string.Concat(ResViewDatabaseDevices.Col_Os_Version.TakeWhile(c => c != ' ')) <br />
+                                    @string.Concat(ResViewDatabaseDevices.Col_Os_Version.SkipWhile(c => c != ' '))
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.OperatingSystemVersion
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.Manufacturer)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_Manufacturer
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.Manufacturer
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.Model)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_Model
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.Model
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.DeviceName)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_Name
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.DeviceName
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.DeviceType)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_Type
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.DeviceType
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.DeviceToken)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_PushToken
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                    if (innerContext is TableDevice currentDevice)
+                                    {
+                                        <div class="text-center w-100 overflowBreakWord">
+                                            @if (string.IsNullOrWhiteSpace(currentDevice.DeviceToken))
+                                                {
+                                                <span>nicht vorhanden</span>
+                                                }
+                                                else
+                                                {
+                                                @*<span class="clickable" title="@currentDevice.DeviceToken">vorhanden</span>*@
+                                                <span>@currentDevice.DeviceToken</span>
+                                                }
+                                        </div>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.DeviceHardwareId)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Device_HardwareId
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.DeviceHardwareId
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.IsAppRunning)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Is_App_Running
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @if (currentDevice.IsAppRunning)
+                                                {
+                                                <img src="/Content/switch-on-32.png" />
+                                                }
+                                                else
+                                                {
+                                                <img src="/Content/switch-off-32.png" />
+                                                }
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@nameof(TableDevice.LastDateTimeUtcOnline)">
+                            <HeaderTemplate>
+                                <div class="text-center">
+                                    @ResViewDatabaseDevices.Col_Last_Time_Online
+                                </div>
+                            </HeaderTemplate>
+                            <Template Context="innerContext">
+                                @{
+                                        if (innerContext is TableDevice currentDevice)
+                                        {
+                                        <div class="text-center">
+                                            @currentDevice.LastDateTimeUtcOnline
+                                        </div>
+                                        }
+                                }
+                            </Template>
+                        </GridColumn>
+                    <GridColumn Field="@nameof(TableDevice.AppVersion)">
+                        <HeaderTemplate>
+                            <div class="text-center">
+                                @ResViewDatabaseDevices.Col_App_Version
+                            </div>
+                        </HeaderTemplate>
+                        <Template Context="innerContext">
+                            @{
+                                if (innerContext is TableDevice currentDevice)
+                                {
+                                    <div class="text-center">
+                                        @currentDevice.AppVersion
+                                    </div>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Title="" Sortable="false">
+                        <Template Context="innerContext">
+                            @{
+                                if (innerContext is TableDevice currentDevice)
+                                {
+                                    <div class="text-center">
+                                        <button class="btn btn-primary colButton" type="button" @onclick="@(() => ShowPushWindow(currentDevice.TblUser, currentDevice))" title="@ResViewDatabaseDevices.Btn_SendPushToCertain">
+                                            <TelerikIcon Icon="@IconName.Notification" />
+                                        </button>
+                                        <button class="btn btn-primary colButton" disabled="@(!currentDevice.IsAppRunning)" type="button" @onclick="@(() => ShowDcWindow(currentDevice.TblUser, currentDevice))" title="@ResViewDatabaseDevices.Btn_SendDcToCertain">
+                                            <TelerikIcon Icon="@IconName.Connector" />
+                                        </button>
+                                    </div>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    </GridColumns>
+                </TelerikGrid>
+            }
+        }
+    </DetailTemplate>
+    <GridColumns>
+        <GridColumn Field="@nameof(TableUser.TblUserImage)" Sortable="false" Resizable="true">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResView.ProfilePicture
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        var source = string.IsNullOrWhiteSpace(currentUser.TblUserImage?.PublicLink) ? "/Content/DefaultUserImageSmall.png" : currentUser.TblUserImage?.PublicLink;
+
+                        <div class="text-center">
+                            <img class="profilePic rounded" src="@source" alt="@ResView.ProfilePicture" />
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.Id)" >
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_Id
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        <div class="text-center">
+                            @currentUser.Id
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.LoginName)" Title="@ResViewDatabaseUser.Col_UserName">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_UserName
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        <div class="text-center">
+                            @currentUser.LoginName
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.CreatedAtUtc)" Editable="false" Title="@ResViewDatabaseUser.Col_CreatedOn">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_CreatedOn
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        <div class="text-center">
+                            @currentUser.CreatedAtUtc.ToLocalTime().ToShortDateString()
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        @*<GridColumn Field="@nameof(TableUser.PhoneNumber)" Editable="false" Title="@ResViewDatabaseUser.Col_PhoneNumber">
+                <HeaderTemplate>
+                    <div class="text-center">
+                        @ResViewDatabaseUser.Col_PhoneNumber
+                    </div>
+                </HeaderTemplate>
+                <Template>
+                    @{
+                        if (context is TableUser currentUser)
+                        {
+                            <div class="text-center">
+                                @currentUser.PhoneNumber
+                            </div>
+                        }
+                    }
+                </Template>
+            </GridColumn>*@
+        <GridColumn Field="@nameof(TableUser.LoginConfirmed)" Editable="false" Title="@ResViewDatabaseUser.Col_PhoneNumber_Verified">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @string.Concat(ResViewDatabaseUser.Col_PhoneNumber_Verified.TakeWhile(c => c != ' ')) <br />
+                    @string.Concat(ResViewDatabaseUser.Col_PhoneNumber_Verified.SkipWhile(c => c != ' '))
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        if (currentUser.LoginConfirmed)
+                        {
+                            <div class="text-center">
+                                <img src="/Content/approve-32.png" alt="Nein" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center">
+                                <img src="/Content/disapprove-32.png" alt="Ja" />
+                            </div>
+                        }
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.Locked)" Editable="false">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_Locked
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        //Wenn gelockt dann lock zu sonst auf
+                        if (currentUser.Locked)
+                        {
+                            <TelerikIcon Icon="@IconName.Lock" />
+                            <button class="btn btn-success buttonDefaultSize" type="button" @onclick="@(() => OnLockingChanged(new GridCommandEventArgs(currentUser)))">
+                                @ResViewDatabaseUser.Command_UnLock
+                            </button>
+                        }
+                        else
+                        {
+                            <TelerikIcon Icon="@IconName.Unlock" />
+                            <button class="btn btn-danger buttonDefaultSize" type="button" @onclick="@(() => OnLockingChanged(new GridCommandEventArgs(currentUser)))">
+                                @ResViewDatabaseUser.Command_Lock
+                            </button>
+                        }
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.AgbVersion)" Editable="false">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_Tac_Confirmed
+                </div>
+            </HeaderTemplate>
+            <Template>
+                <div class="text-center">
+                    @{
+                        if (context is TableUser currentUser)
+                        {
+                            if (string.IsNullOrWhiteSpace(currentUser.AgbVersion))
+                            {
+                                <img src="/Content/cancel-32.png" />
+                            }
+                            else
+                            {
+                                <img src="/Content/ok-32.png" />
+                                <span>Version: @currentUser.AgbVersion</span>
+                            }
+                        }
+                    }
+                </div>
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableUser.DefaultLanguage)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseUser.Col_Default_Language
+                </div>
+            </HeaderTemplate>
+            <Template>
+                <div class="text-center">
+                    @{
+                        if (context is TableUser currentUser)
+                        {
+                            <span>@(new CultureInfo(currentUser.DefaultLanguage).DisplayName)</span>
+                        }
+                    }
+                </div>
+            </Template>
+        </GridColumn>
+        <GridColumn>
+            <HeaderTemplate>
+                <div class="text-center">
+                    @string.Concat(ResViewDatabaseUser.Col_Assigned_Devices.TakeWhile(c => c != ' ')) <br />
+                    @string.Concat(ResViewDatabaseUser.Col_Assigned_Devices.SkipWhile(c => c != ' '))
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        string amountStr = "Keine";
+                        string dev = "Geräte";
+
+                        if (!(currentUser.TblDevices is null) && currentUser.TblDevices.Any())
+                        {
+                            var amount = currentUser.TblDevices.Count;
+                            amountStr = amount.ToString();
+                            dev = amount == 1 ? "Gerät" : "Geräte";
+                        }
+
+                        <div class="text-center">
+                            @amountStr @dev
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Width="200px" Title="" Sortable="false">
+            <Template>
+                @{
+                    if (context is TableUser currentUser)
+                    {
+                        <div class="text-center">
+                            <button class="btn btn-primary colButton" type="button" @onclick="@(() => ShowSmsWindow(currentUser))" title="@ResViewDatabaseUser.Command_SendSms">
+                                <TelerikIcon Icon="@IconName.Email" />
+                            </button>
+                            <button class="btn btn-primary colButton" type="button" @onclick="@(() => ShowPushWindow(currentUser))" title="@ResViewDatabaseUser.Command_SendPush">
+                                <TelerikIcon Icon="@IconName.Notification" />
+                            </button>
+                            <button class="btn btn-primary colButton" disabled="@(currentUser.TblDevices != null && !currentUser.TblDevices.Any(d => d.IsAppRunning))" type="button" @onclick="@(() => ShowDcWindow(currentUser))" title="@ResViewDatabaseUser.Btn_SendDcToCertain">
+                                <TelerikIcon Icon="@IconName.Connector" />
+                            </button>
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+    </GridColumns>
+</TelerikGrid>
+
+<!-- initial hidden Windows-->
+<TelerikWindow @bind-Visible="@_showSmsWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (ChosenUser is null)
+            {
+                <strong>@ResViewDatabaseUser.Command_SendSms @ResViewDatabaseUser.Word_to @ResViewDatabaseUser.Word_all</strong>
+            }
+            else
+            {
+                <strong>@ResViewDatabaseUser.Command_SendSms @ResViewDatabaseUser.Word_to: @ChosenUser.LoginName</strong>
+            }
+        }
+
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HideSmsWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        <div class="text-center w-100">
+            <TelerikTextArea @bind-Value="@MessageText" Label="@ResViewDatabaseUser.Label_SmsText" PlaceHolder="Geben Sie die SMS ein" Width="100%" AutoSize="true" />
+            <button class="btn btn-primary m-5" type="button" @onclick="@(() => SendSms())">
+                @ResViewDatabaseUser.Command_SendSms
+            </button>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikWindow @bind-Visible="@_showDcWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (ChosenUser is null)
+            {
+                <strong>@ResViewDatabaseUser.Btn_SendDcToAll</strong>
+            }
+            else
+            {
+                if (ChosenDevice is null)
+                {
+                    <strong>@ResViewDatabaseDevices.Btn_SendDcToCertain @ResViewDatabaseUser.Word_to @ChosenUser.LoginName</strong>
+                }
+                else
+                {
+                    <strong>@ResViewDatabaseDevices.Btn_SendDcToCertain @ResViewDatabaseUser.Word_to @ResViewDatabaseDevices.Col_Device_Id @ChosenDevice.Id (@ResViewDatabaseUser.Word_User @ChosenUser.LoginName)</strong>
+                }
+            }
+        }
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HideDcWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        <div class="text-center w-100">
+            <TelerikTextArea @bind-Value="@MessageText" Label="@ResViewDatabaseUser.Label_DcText" PlaceHolder="@ResViewDatabaseUser.MessagePlaceHolder" Width="100%" AutoSize="true" />
+            <button class="btn btn-primary m-5" type="button" @onclick="@(() => SendDc(ChosenUser, ChosenDevice))">
+                @ResViewDatabaseUser.Btn_SendDcToCertain
+            </button>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!--Window for push notifying-->
+<TelerikWindow @bind-Visible="@_showPushWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (ChosenUser is null)
+            {
+                <strong>@ResViewDatabaseUser.Btn_SendPushToAll</strong>
+            }
+            else
+            {
+                if (ChosenDevice is null)
+                {
+                    <strong>@ResViewDatabaseDevices.Btn_SendPushToCertain @ResViewDatabaseUser.Word_to @ChosenUser.LoginName</strong>
+                }
+                else
+                {
+                    <strong>@ResViewDatabaseDevices.Btn_SendPushToCertain @ResViewDatabaseUser.Word_to @ResViewDatabaseDevices.Col_Device_Id @ChosenDevice.Id (@ResViewDatabaseUser.Word_User @ChosenUser.LoginName)</strong>
+                }
+            }
+        }
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HidePushWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        <div class="text-center w-100">
+            <TelerikTextBox @bind-Value="@MessageTitle" Label="@ResViewDatabaseDevices.lable_messagetitel" Width="100%" />
+            <TelerikTextArea @bind-Value="@MessageText" Label="@ResViewDatabaseDevices.lable_messagetext" PlaceHolder="Geben Sie die Push Nachricht ein" Width="100%" AutoSize="true" />
+            <button class="btn btn-primary m-5" type="button" @onclick="@(() => SendPush(ChosenUser, ChosenDevice))">
+                @ResViewDatabaseUser.Command_SendPush
+            </button>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+
+<style>
+    .buttonDefaultSize {
+        width: 100px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+        .clickable:hover {
+            font-weight: 900;
+        }
+
+    .profilePic {
+        max-height: 50px;
+    }
+
+    .colButton {
+        width: 30%;
+    }
+</style>
+
+@code {
+
+    #region GridPresentation
+
+    private readonly string _profileImageApiUrl = "http://localhost:53019/api/" + "GetFile/"; // Constants.ServiceClientEndPointWithApiPrefix + "GetFile/";
+
+    /// <summary>
+    ///     Liste der User in der Datenbank
+    /// </summary>
+    private List<TableUser> _clients = new List<TableUser>();
+
+    private TableUser? ChosenUser { get; set; }
+
+    private TableDevice? ChosenDevice { get; set; }
+
+    private bool _showSmsWindow;
+
+    private bool _showDcWindow;
+
+    private bool _showPushWindow;
+
+    private string MessageTitle { get; set; } = StandardMessageTitle;
+
+    private string MessageText { get; set; } = StandardMessageText;
+
+    private const string StandardMessageTitle = "Das ist ein toller Nachrichten-Titel";
+
+    private const string StandardMessageText = "Das ist ein toller Nachrichten-Text";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!User.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        base.OnInitializedAsync();
+
+        try
+        {
+            using (var db = new DatabaseContext(WebConstants.ConnectionString))
+            {
+                _clients = new List<TableUser>(db.TblUsers.Include(x => x.TblUserImage).Include(y => y.TblDevices));
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Log.LogError($"{e}");
+            _clients = new List<TableUser>();
+        }
+    }
+
+    /// <summary>
+    ///     Wenn sich der Lockstatus ändern soll
+    /// </summary>
+    /// <param name="e"></param>
+    private async void OnLockingChanged(GridCommandEventArgs e)
+    {
+        if (!(e.Item is TableUser toBeChangedUser)) return;
+
+        try
+        {
+            //In der Datenbank wird der Status des Users verändert
+            await using var db = new DatabaseContext(WebConstants.ConnectionString);
+
+            var dbUser = await db.TblUsers.FirstOrDefaultAsync(t => t.Id == toBeChangedUser.Id);
+
+            if (dbUser is null) return;
+
+            dbUser.Locked = !toBeChangedUser.Locked;
+
+            var x = await db.SaveChangesAsync();
+
+            toBeChangedUser.Locked = dbUser.Locked;
+        }
+        catch (Exception ex)
+        {
+            Logging.Log.LogError($"{ex}");
+        }
+
+        StateHasChanged();
+    }
+
+    private void ShowSmsWindow(TableUser user = null)
+    {
+        ChosenUser = user;
+        _showSmsWindow = true;
+    }
+
+    private void HideSmsWindow()
+    {
+        _showSmsWindow = false;
+        MessageTitle = StandardMessageTitle;
+        MessageText = StandardMessageText;
+        ChosenUser = default;
+        ChosenDevice = default;
+    }
+
+    private void ShowDcWindow(TableUser user = null, TableDevice device = null)
+    {
+        ChosenUser = user;
+        ChosenDevice = device;
+        _showDcWindow = true;
+    }
+
+    private void HideDcWindow()
+    {
+        _showDcWindow = false;
+        MessageTitle = StandardMessageTitle;
+        MessageText = StandardMessageText;
+        ChosenUser = default;
+        ChosenDevice = default;
+    }
+
+    private void ShowPushWindow(TableUser user = null, TableDevice device = null)
+    {
+        ChosenUser = user;
+        ChosenDevice = device;
+        _showPushWindow = true;
+    }
+
+    private void HidePushWindow()
+    {
+        _showPushWindow = false;
+        MessageTitle = StandardMessageTitle;
+        MessageText = StandardMessageText;
+        ChosenUser = default;
+        ChosenDevice = default;
+    }
+
+    private async void SendSms(TableUser user = null)
+    {
+        if (user is null)
+        {
+            // Todo send message to all via sms
+            foreach (var c in _clients)
+            {
+            }
+        }
+
+
+        HideSmsWindow();
+    }
+
+    private async void SendDc(TableUser user = null, TableDevice device = null)
+    {
+        if (device is null)
+        {
+            if (user is null)
+            {
+                //Todo send DC to all user and devices
+            }
+            else
+            {
+                //Todo send DC to all devices of user
+            }
+        }
+        else
+        {
+            //Todo send DC to device
+        }
+
+        HideDcWindow();
+    }
+
+    /// <summary>
+    ///     Benachrichtige über Push
+    /// </summary>
+    private async void SendPush(TableUser user = null, TableDevice device = null)
+    {
+        PushResult result = new PushResult(0,0);
+
+        if (user is null)
+        {
+            result = await PushService.Instance.SendBroadcast(MessageTitle, MessageText).ConfigureAwait(true);
+        }
+        else
+        {
+            Collection<string> tokens;
+
+            if (device is null)
+            {
+                var devices = new List<ExDevice>(user.TblDevices.OrderByDescending(y => y.LastDateTimeUtcOnline));
+                tokens = new Collection<string>(devices.Select(u => u.DeviceToken).Where(t => !string.IsNullOrWhiteSpace(t)).ToList());
+            }
+            else
+            {
+                tokens = string.IsNullOrWhiteSpace(device.DeviceToken) ? new Collection<string>() : new Collection<string> { device.DeviceToken };
+            }
+
+            if (tokens.Any())
+            {
+                result = await PushService.Instance.SendMessageToDevices(MessageTitle, MessageText, tokens).ConfigureAwait(true);
+            }
+        }
+
+        HidePushWindow();
+    }
+
+    #endregion
+
+}

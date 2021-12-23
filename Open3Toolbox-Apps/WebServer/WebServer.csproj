@@ -1,0 +1,247 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<UserSecretsId>aspnet-WebServer-597CE958-EA44-4141-9E9D-F45E361B7C0F</UserSecretsId>
+
+		<!-- Package Infos -->
+		<Product>WpfApp</Product>
+		<Description>App für Plattform WPF</Description>
+		<Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+		<Copyright>(C) 2009-2020 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+		<Authors>BISS</Authors>
+		<NeutralLanguage>de</NeutralLanguage>
+		<AssemblyVersion>0.0.1.0</AssemblyVersion>
+		<FileVersion>0.0.1.0</FileVersion>
+		<Version>0.0.1.0</Version>
+
+		<!-- Pflicht! -->
+		<Nullable>Enable</Nullable>
+
+		<!-- Build Einstellungen -->
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<SignAssembly>false</SignAssembly>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PreserveCompilationReferences>true</PreserveCompilationReferences>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+
+		<!-- NoWarn für Missmatch bei .NetStandard 2.1 und .Netcore 3.1 -->
+		<NoWarn>NU1201,NU1202</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="wwwroot\DSVGO\**" />
+		<Compile Remove="wwwroot\GDPR\**" />
+		<Content Remove="wwwroot\DSVGO\**" />
+		<Content Remove="wwwroot\GDPR\**" />
+		<EmbeddedResource Remove="wwwroot\DSVGO\**" />
+		<EmbeddedResource Remove="wwwroot\GDPR\**" />
+		<None Remove="wwwroot\DSVGO\**" />
+		<None Remove="wwwroot\GDPR\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="wwwroot\Content\DefaultUserImageSmall.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\Content\DefaultUserImageSmall.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Pages\DataBaseDevices.razor">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Biss" Version="5.1.9" />
+		<PackageReference Include="Biss.Apps.Service.Push" Version="7.1.0" />
+		<PackageReference Include="BlazorInputFile" Version="0.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+		<PackageReference Include="MQTTnet" Version="3.1.0" />
+		<PackageReference Include="RazorLight" Version="2.0.0-beta9" />
+		<PackageReference Include="System.IO.Ports" Version="6.0.0" />
+		<PackageReference Include="Telerik.UI.for.Blazor" Version="2.22.0" />
+		<PackageReference Include="Biss.Dc.Transport.Server.SignalR" Version="1.7.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Open3Toolbox-Core\Database\Database.csproj" />
+	  <ProjectReference Include="..\..\Open3Toolbox-Core\ExchangeLibrary\ExchangeLibrary.csproj" />
+	  <ProjectReference Include="..\Exchange\Exchange.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Pages\Migrations.razor">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Update="Views\Email\EmailPasswordChanged.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\Email\EmailPasswordReset.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\Email\EmailVerification.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Views\Email\_EMailBase.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\AGBS\1.1.pdf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\android.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\azure.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\azuredevops.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\FH-Wiener-Neustadt-Logo.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\fotec.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\ios.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\Content\uwp.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="DataConnector\IServerRemoteCalls.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>IServerRemoteCalls.cs</LastGenOutput>
+		</None>
+		<None Update="DataConnector\ServerRemoteCallBase.tt">
+			<CustomToolNamespace></CustomToolNamespace>
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>ServerRemoteCallBase.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="DataConnector\IServerRemoteCalls.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>IServerRemoteCalls.tt</DependentUpon>
+		</Compile>
+		<Compile Update="DataConnector\ServerRemoteCallBase.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ServerRemoteCallBase.tt</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\ResPushTexts.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ResPushTexts.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\ResViewDatabaseDevices - Copy.Designer.cs">
+			<DependentUpon>ResViewDatabaseDevices.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewDatabaseDevices.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ResViewDatabaseDevices.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\ResViewDatabaseDeviceStatistics.Designer.cs">
+			<DependentUpon>ResViewDatabaseDeviceStatistics.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewDatabaseMigrations.Designer.cs">
+			<DependentUpon>ResViewDatabaseMigrations.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewDatabaseUser.Designer.cs">
+			<DependentUpon>ResViewDatabaseUser.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewNavBar.Designer.cs">
+			<DependentUpon>ResViewNavBar.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="Resources\ResViewTopNavBar.Designer.cs">
+			<DependentUpon>ResViewTopNavBar.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\ResPushTexts.en.resx">
+			<Generator></Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResPushTexts.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>ResPushTexts.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewDatabaseDevices.en.resx">
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewDatabaseDevices.resx">
+			<LastGenOutput>ResViewDatabaseDevices.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewDatabaseDeviceStatistics.resx">
+			<LastGenOutput>ResViewDatabaseDeviceStatistics.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewDatabaseMigrations.resx">
+			<LastGenOutput>ResViewDatabaseMigrations.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewDatabaseUser.resx">
+			<LastGenOutput>ResViewDatabaseUser.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewNavBar.resx">
+			<LastGenOutput>ResViewNavBar.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResViewTopNavBar.resx">
+			<LastGenOutput>ResViewTopNavBar.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Properties\ServiceDependencies\" />
+	  <Folder Include="Services\ServiceDependencies\" />
+	</ItemGroup>
+
+	<!-- https://github.com/dotnet/sdk/issues/1458#issuecomment-420456386 -->
+	<Target Name="_ResolveCopyLocalNuGetPackagePdbsAndXml" Condition="$(CopyLocalLockFileAssemblies) == true" AfterTargets="ResolveReferences">
+		<ItemGroup>
+			<ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).pdb')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' and Exists('%(RootDir)%(Directory)%(Filename).pdb')" />
+			<ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+		</ItemGroup>
+	</Target>
+
+</Project>

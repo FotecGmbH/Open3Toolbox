@@ -1,0 +1,46 @@
+﻿@using Biss.Apps.Interfaces
+@using Biss.Apps.Blazor.Components
+@if (Item.NeedsConfirmation)
+{
+    <div class="modal fade show" id="myModal" style=" display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    @Item.ConfirmationTitle
+                    @if (Item.Button == VmMessageBoxButton.OkCancel || Item.Button == VmMessageBoxButton.YesNoCancel)
+                    {
+                        <button type="button" class="close" @onclick="Item.ConfirmCancel">&times;</button>
+                    }
+                </div>
+                <div class="modal-body">
+                    @Item.ConfirmationMessage
+                </div>
+                <div class="modal-footer">
+                    @if (Item.Button == VmMessageBoxButton.YesNo || Item.Button == VmMessageBoxButton.YesNoCancel)
+                    {
+                        <button class="btn btn-success" @onclick="Item.ConfirmYes">@(Item.FirstButtonText ?? "Ja")</button>
+                        <button class="btn btn-danger" @onclick="Item.ConfirmNo">@(Item.SecondButtonText ?? "Nein")</button>
+                        @if (Item.Button == VmMessageBoxButton.YesNoCancel)
+                        {
+                            <button class="btn btn-danger" @onclick="Item.ConfirmCancel">Abbrechen</button>
+                        }
+                    }
+                    else if (Item.Button == VmMessageBoxButton.Ok || Item.Button == VmMessageBoxButton.OkCancel)
+                    {
+                        <button class="btn btn-success" @onclick="Item.ConfirmYes">@(Item.FirstButtonText ?? "OK")</button>
+                        @if (Item.Button == VmMessageBoxButton.OkCancel)
+                        {
+                            <button class="btn btn-danger" @onclick="Item.ConfirmCancel">Abbrechen</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter] public MsgBoxComp Item { get; set; }
+}

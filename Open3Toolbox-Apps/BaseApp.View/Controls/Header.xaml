@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="BaseApp.Controls.Header"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:baseApp="clr-namespace:BaseApp;assembly=BaseApp"
+    xmlns:controls="clr-namespace:BaseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rad="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    x:Name="HeaderBase"
+    d:DataContext="{x:Static baseApp:DesignVmBase.DesignInstance}"
+    mc:Ignorable="d">
+    <ContentView.Content>
+        <Grid
+            BackgroundColor="{StaticResource AccentColor}"
+            ColumnSpacing="0"
+            IsEnabled="{Binding IsBusy, Converter={x:StaticResource InvertedBooleanConverter}}"
+            Opacity="{Binding IsBusy, Converter={x:StaticResource BooleanToOpacityConverter}}"
+            RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+
+            <!--#region Verbindungsstatus-->
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="5"
+                IsVisible="{Binding ShowNotConnected}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+
+                <BoxView
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    BackgroundColor="{StaticResource ErrorColor}" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    Text="Keine Verbindung zum Server"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+
+            </Grid>
+
+            <!--#endregion-->
+
+            <!--#region Zurück-->
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Margin="10"
+                IsVisible="{Binding ShowBack, Source={x:Reference HeaderBase}}">
+                <rad:RadBorder
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource MainColor}"
+                    BorderThickness="1"
+                    Style="{x:StaticResource StyleHeaderBorder}" />
+                <Label
+                    FontFamily="{x:StaticResource StreamLineIcons}"
+                    FontSize="24"
+                    HorizontalOptions="Center"
+                    Text="{Binding CmdBack.Glyph}"
+                    TextColor="{StaticResource MainColor}"
+                    VerticalOptions="Center" />
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CmdBack}" NumberOfTapsRequired="1" />
+                </Grid.GestureRecognizers>
+            </Grid>
+            <!--#endregion-->
+
+            <!--  aktuelle Zeit  -->
+            <Label
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="3"
+                IsVisible="{Binding ShowUserStateAndTime}"
+                Text="{Binding BaseData.CurrentTime}"
+                TextColor="{StaticResource MainColor}"
+                VerticalOptions="Center" />
+
+            <!--  Info  -->
+            <Label
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                FontFamily="{x:StaticResource StreamLineIcons}"
+                FontSize="24"
+                HorizontalOptions="Center"
+                IsVisible="{Binding InfoInHeaderVisible}"
+                Text="&#xE92F;"
+                TextColor="{StaticResource WhiteColor}"
+                VerticalOptions="Center" />
+            <BoxView
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                BackgroundColor="Transparent"
+                IsVisible="{Binding InfoInHeaderVisible}">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CmdInfoText}" NumberOfTapsRequired="1" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

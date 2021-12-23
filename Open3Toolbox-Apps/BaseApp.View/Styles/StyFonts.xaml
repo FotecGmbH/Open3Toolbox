@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="BaseApp.Styles.StyFonts"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:system="clr-namespace:System;assembly=netstandard">
+
+    <x:String x:Key="StreamLineIconsRegular">
+        StreamLineIconsNEW
+    </x:String>
+    <x:String x:Key="StreamLineIconsLight">
+        StreamLineIconsLightNEW
+    </x:String>
+    <x:String x:Key="StreamLineIconsBold">
+        StreamLineIconsBoldNEW
+    </x:String>
+    <x:String x:Key="StreamLineIcons">
+        StreamLineIconsLightNEW
+    </x:String>
+    <x:String x:Key="SourceSansProRegular">
+        SourceSansProRegularNEW
+    </x:String>
+
+    <OnPlatform x:Key="BaseButtonFontAttributes" x:TypeArguments="FontAttributes">
+        <On Platform="Android" Value="None" />
+        <On Platform="iOS" Value="None" />
+        <On Platform="UWP, WinRT, WinPhone, WPF" Value="None" />
+    </OnPlatform>
+
+</ResourceDictionary>

@@ -1,0 +1,78 @@
+﻿@page "/sensorstatistics/actor"
+@page "/sensorstatistics/actor/{Id:int}"
+
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Model.Statistics
+@using Exchange.Resources.ResStatistics
+
+@inherits ProjectRazorPage<VmActorDetails>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewActorDetails.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-xl p-0">
+                <div class="d-flex flex-row flex-nowrap">
+                    <button class="btn btn-dark my-2" @onclick="() => this.ViewModel.CmdGoBack.Execute(null)">@IconProvider.RenderBackArrow(2, 2)</button>
+                    @*<BreadCrumbsComponent Class="mt-3 mr-3 w-100" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>Id</h3>
+            <h5>@this.ViewModel.ActorDetails.Index</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>Name</h3>
+            <h5>@this.ViewModel.ActorDetails.Data.Name</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>Description</h3>
+            <h5>@this.ViewModel.ActorDetails.Data.Description</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>Port</h3>
+            <h5>@this.ViewModel.ActorDetails.Data.Port</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>Action</h3>
+            @switch (this.ViewModel.ActorDetails.Data.SetterType)
+            {
+                case Exchange.Enum.ActorSetterType.Switch:
+                    @*Touch this switch carefully, could make troubles*@
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="actorSwitch" @bind-value="this.ViewValue">
+                        <label class="custom-control-label" for="actorSwitch"></label>
+                    </div>
+                    break;
+                case Exchange.Enum.ActorSetterType.Range:
+                    <div class="d-flex flex-row flex-nowrap form-group py-2">
+                        <div class="form-control border-0 bg-transparent px-0">
+                            <RadzenSlider Min="0" Max="1" Step="0.001" Style="width:100%" @bind-Value="this.ViewModel.ActorDetails.Data.Value" /> @*Ranges could cause troubles*@
+                        </div>
+                        <input type="number" min="0" max="1" step="0.001" class="form-control ml-2" @bind-value="this.ViewModel.ActorDetails.Data.Value" />
+                    </div>
+                    break;
+            }
+        </div>
+        <div class="row d-flex flex-row flex-nowrap justify-content-start">
+            <button class="btn btn-primary" 
+                    @onclick="() => this.ViewModel.CmdSendCommand.Execute(null)">
+                @this.ViewModel.CmdSendCommand.DisplayName
+            </button>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+    public bool ViewValue
+    {
+        get => this.ViewModel.ActorDetails.Data.Value == 0 ? false : true;
+        set => this.ViewModel.ActorDetails.Data.Value = value == false ? 0 : 1;
+    }
+}

@@ -1,0 +1,77 @@
+﻿@page "/ViewSettingsLogic"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@using Newtonsoft.Json
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<PageTitle>Physikalische Ansicht</PageTitle>
+<div class="row">
+    <div class="col-12 p-2">
+        <RadzenButton Icon="add" Text="Neue Ansicht anlegen" Click="@(a => NavigationManager.NavigateTo("ViewSettingsLogicNew"))" ></RadzenButton>
+    </div>
+</div>
+<div class="row">
+    @if(LstUserLogicViews != null)
+    {
+        @foreach(var logicView in LstUserLogicViews)
+        {
+           <div class="col-md-12 col-sm-12 col-lg-4 p-2">
+                <RadzenCard class="mt-2">
+                    <div>
+                        <RadzenIcon Icon="preview"></RadzenIcon>
+                    
+                        <h3 class="mb-0"><span class="badge bg-secondary text-white">@logicView.Name</span></h3>
+                        <br>
+                        <RadzenButton Text="Bearbeiten" Click="@(a => NavigationManager.NavigateTo($"ViewSettingsLogicEdit/{logicView.Id}"))" class="btn-primary mr-2"></RadzenButton>
+                        <RadzenButton Text="Anzeigen" Click="@(a => NavigationManager.NavigateTo($"ViewDataForLogicView/{logicView.Id}"))" class="btn-success" ></RadzenButton>
+                    </div>
+                </RadzenCard>
+            </div>
+        }
+    }
+
+</div>
+
+@code {
+
+    public List<ExUserLogicView> LstUserLogicViews { get; set; }
+
+    public List<Measurement> LstMeasurements { get; set; }
+
+    IEnumerable<Project> projects;
+    string baseUrl = "https://localhost:5003/";
+
+    object selection;
+    MeasurementValue measurement = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var logicViews = await localStorage.GetItemAsync<string>("logicViews");
+        if(!String.IsNullOrEmpty(logicViews))
+        {
+            try
+            {
+                LstUserLogicViews = JsonConvert.DeserializeObject<List<ExUserLogicView>>(logicViews);
+            }catch{
+                LstUserLogicViews = new List<ExUserLogicView>();
+            }
+        }
+        else
+        {
+            LstUserLogicViews = new List<ExUserLogicView>();
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Client c = new Client(baseUrl, Http);
+
+        projects = await c.ProjectsAllAsync();
+        LstMeasurements = projects.SelectMany(a => a.Gateways).SelectMany(a => a.Sensors).SelectMany(a => a.Interfaces).SelectMany(a => a.Chips).SelectMany(a => a.Measurements).ToList();
+
+        await base.OnParametersSetAsync();
+    }
+
+}

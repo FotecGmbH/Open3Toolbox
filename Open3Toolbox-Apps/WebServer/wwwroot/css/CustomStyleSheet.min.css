@@ -1,0 +1,98 @@
+﻿.send {
+    background-image: none;
+    background-color: #d3d3d3;
+    color: #000;
+    margin-top: 18px
+}
+
+    .send:hover {
+        background-color: gray
+    }
+
+.androidText {
+    background-image: none;
+    margin-bottom: 15px;
+    margin-top: 5px
+}
+
+.androidBtn {
+    background-image: none;
+    margin-bottom: 5px;
+    margin-top: 15px
+}
+
+.iosText {
+    background-image: none;
+    margin-bottom: 15px;
+    margin-top: 5px
+}
+
+.iosBut {
+    background-image: none;
+    margin-bottom: 5px;
+    margin-top: 15px
+}
+
+.share {
+    background-image: none;
+    background-color: #d3d3d3;
+    color: #000;
+    margin-bottom: 10px
+}
+
+    .share:hover {
+        background-color: gray
+    }
+
+.w-45 {
+    width: 45%
+}
+
+.lock {
+    background-image: none;
+    margin-bottom: 8px;
+    background-color: #d3d3d3;
+    color: #000
+}
+
+    .lock:hover {
+        background-image: none;
+        background-color: #696969;
+        color: #fff
+    }
+
+.edit {
+    background-image: none;
+    background-color: #1e90ff;
+    color: #fff
+}
+
+    .edit:hover {
+        background-image: none;
+        background-color: #4169e1
+    }
+
+.save {
+    background-image: none;
+    margin-bottom: 8px;
+    background-color: #32cd32;
+    color: #000
+}
+
+    .save:hover {
+        background-image: none;
+        background-color: green;
+        color: #fff
+    }
+
+.cancel {
+    background-image: none;
+    background-color: red;
+    color: #000
+}
+
+    .cancel:hover {
+        background-image: none;
+        background-color: #8b0000;
+        color: #fff
+    }

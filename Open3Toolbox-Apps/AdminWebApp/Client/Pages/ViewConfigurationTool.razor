@@ -1,0 +1,163 @@
+﻿@page "/configurationtool"
+
+@inherits ProjectRazorPage<BaseApp.ViewModel.ConfigurationTool.VmConfigurationTool>
+
+@using Microsoft.AspNetCore.Components.Web
+@using Biss.Serialize
+@using Exchange.Model.ConfigurationTool
+@using Exchange.Extensions
+@using Exchange.Services.ConfigurationTool
+@using Exchange.Services.ConfigurationTool.Interfaces
+@using BaseApp.ViewModel.ConfigurationTool
+@using Exchange.Model.ConfigurationTool.Interfaces
+@using AdminWebApp.Client.Components
+@using BaseApp.DataConnector
+@using ExConfigExchange.Models
+@using ExConfigExchange.Models.Interfaces
+@using ExConfigExchange.Services
+@using Exchange.Resources.ResConfigurationTool
+@using AdminWebApp.Client.Extensions
+@using Biss.Dc.Client;
+
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<ToastControl Item="@Toast"></ToastControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+
+<CardContainer Title="@ResViewConfigurationTool.Title">
+    <div class="@(this.fullScreenDetails ? "" : "container-fluid")">
+        <div class="row mb-2 mr-1 justify-content-between" hidden=@(this.fullScreenDetails)>
+            <span class="d-flex flex-row flex-nowrap align-items-center">
+                <strong>@ResViewConfigurationTool.Projects</strong>
+                <button type="button"
+                        @onclick="@(() => this.ViewModel.CmdAddProject.Execute(null))"
+                        class="btn btn-success ml-2">
+                    <span class="d-flex flex-row flex-nowrap align-items-center">
+                        @IconProvider.RenderFilledPlusIcon()
+                        <span class="mx-1" />
+                        @this.ViewModel.CmdAddProject.DisplayName
+                    </span>
+                </button>
+            </span>
+
+            <button class="btn btn-primary" 
+                    @onclick="@(() => this.ViewModel.CmdToGatewayConnectorView.Execute(null))" 
+                    disabled="@(!this.ViewModel.CmdToGatewayConnectorView.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap align-items-center">
+                    @this.ViewModel.CmdToGatewayConnectorView.DisplayName
+                    <span class="mx-1"/>
+                    @IconProvider.RenderWifiIcon()
+                </span>
+            </button>
+        </div>
+        <div class="row mb-2 ">
+            <div class="col-12 col-xl border border-light rounded p-0 bg-white mr-1" hidden=@(this.fullScreenDetails)>
+                <RadzenTree Data="@this.ViewModel.Projects" @bind-Value="this.ViewModel.SelectedValue">
+                    <RadzenTreeLevel TextProperty="@nameof(VmProject.Name)" ChildrenProperty="@nameof(VmProject.Gateways)" HasChildren="@((p) => (p as VmProject).Gateways.Any())">
+                        <Template>
+                            <span class="d-flex flex-row flex-nowrap align-items-center">
+                                @{
+                                    string icon = "\uE929";
+                                    <span class="sl-icon mr-1">@icon</span>
+                                }
+                                <strong>@((context.Value as VmProject).Name)</strong>
+                                <button type="button" @onclick="@(() => this.ViewModel.CmdAddGateway.Execute(context.Value as VmProject))" @onclick:stopPropagation="true" class="btn btn-success ml-2">
+                                    <span class="d-flex flex-row flex-nowrap align-items-center">
+                                        @IconProvider.RenderFilledPlusIcon()
+                                        <span class="mx-1" />
+                                        @this.ViewModel.CmdAddGateway.DisplayName
+                                    </span>
+                                </button>
+                            </span>
+                        </Template>
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(VmGateway.Name)" ChildrenProperty="@nameof(VmGateway.Sensors)" HasChildren="@((g) => (g as VmGateway).Sensors.Any())">
+                        <Template>
+                            <span class="d-flex flex-row flex-nowrap align-items-center">
+                                @{
+                                    string icon = "\uEF41";
+                                    <span class="sl-icon mr-1">@icon</span>
+                                }
+                                <strong>@((context.Value as VmGateway).Name)</strong>
+                                <button type="button" @onclick="@(() => this.ViewModel.CmdAddSensor.Execute(context.Value as VmGateway))" @onclick:stopPropagation="true" class="btn btn-success  ml-2">
+                                    <span class="d-flex flex-row flex-nowrap align-items-center">
+                                        @IconProvider.RenderFilledPlusIcon()
+                                        <span class="mx-1"/>
+                                        @this.ViewModel.CmdAddSensor.DisplayName
+                                    </span>
+                                </button>
+                            </span>
+                        </Template>
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(VmSensor.Name)" HasChildren="@((_) => false)">
+                        <Template>
+                            <div style="margin-left:25px;">
+                                <span class="d-flex flex-row flex-nowrap align-items-center">
+                                    @{
+                                        string icon = "\uEF0B";
+                                        <span class="sl-icon mr-2">@icon</span>
+                                    }
+                                    <strong>@((context.Value as VmSensor).Name)</strong>
+                                </span>
+                            </div>
+                        </Template>
+                    </RadzenTreeLevel>
+                </RadzenTree>
+            </div>
+            <div class="border border-light rounded p-0 bg-white @(this.fullScreenDetails ? "col-12 col-xl" : "col mr-3")" hidden="@(this.ViewModel.SelectedValue is null)">
+                <div class="d-flex justify-content-end mr-2 mt-2">
+                    <button class="btn btn-outline-primary" @onclick="this.ToogleFullScreenDetails">
+                        <span class="d-flex flex-row flex-nowrap align-items-center">
+                            @if (this.fullScreenDetails)
+                            {
+                                @IconProvider.RenderExitFullScreenIcon()
+                            }
+                            else
+                            {
+                                @IconProvider.RenderFullScreenIcon()
+                            }
+                        </span>
+                    </button>
+                </div>
+                @*Sidepanel is only visible when item is selected.*@
+                @if (this.ViewModel.SelectedValue != null)
+                {
+                    if (this.ViewModel.SelectedValue is VmProject p)
+                    {
+                        <ConfigurableEditorComponent T="ExProject" DataPoint="p.DataPoint" OnDeleteRequested="@((_) => this.ViewModel.CmdRemoveIExConfigurable.Execute(null))" OnChangesSaved="this.StateHasChanged" />
+                    }
+                    else if (this.ViewModel.SelectedValue is VmGateway g)
+                    {
+                        <ConfigurableEditorComponent T="ExGateway" DataPoint="g.DataPoint" OnDeleteRequested="@((_) => this.ViewModel.CmdRemoveIExConfigurable.Execute(null))" OnChangesSaved="this.StateHasChanged" />
+                    }
+                    else if (this.ViewModel.SelectedValue is VmSensor s)
+                    {
+                        <ConfigurableEditorComponent T="ExSensor" DataPoint="s.DataPoint" OnDeleteRequested="@((_) => this.ViewModel.CmdRemoveIExConfigurable.Execute(null))" OnChangesSaved="this.StateHasChanged" />
+                    }
+                    else
+                    {
+                        <p>@ResViewConfigurationTool.InvalidSelection</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+    private bool fullScreenDetails = false;
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+        this.ViewModel.OnIExConfigurableRemoved += (_, _) => { this.fullScreenDetails = false; this.StateHasChanged(); };
+    }
+
+    private void ToogleFullScreenDetails()
+    {
+        this.fullScreenDetails = !this.fullScreenDetails;
+        this.StateHasChanged();
+    }
+}

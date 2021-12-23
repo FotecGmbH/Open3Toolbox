@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="BaseApp.Styles.StyConverter"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:baseConverter="clr-namespace:Biss.Apps.Converter;assembly=Biss.Apps.XF"
+    xmlns:converter="clr-namespace:BaseApp.Converter;assembly=BaseApp.View"
+    xmlns:styles="clr-namespace:BaseApp.Styles;assembly=BaseApp.View">
+
+    <ResourceDictionary.MergedDictionaries>
+        <styles:StyColors />
+    </ResourceDictionary.MergedDictionaries>
+
+    <baseConverter:BooleanValueConverter
+        x:Key="BooleanHeaderColorConverter"
+        FalseValue="{StaticResource MainColor}"
+        TrueValue="{StaticResource AccentColor}" />
+
+    <converter:ConnectionStateToVisibilityConverter x:Key="ConnectionStateToVisibilityConverter" />
+
+    <converter:ConnectionStateToVisibilityConverter
+        x:Key="ConnectionStateToInvertedVisibilityConverter"
+        ConnectedValue="False"
+        DisconnectedValue="True" />
+
+    <baseConverter:BooleanValueConverter
+        x:Key="ShowPasswordColor"
+        FalseValue="{StaticResource LightTextColor}"
+        TrueValue="{StaticResource MainColor}" />
+
+
+    <converter:UrlToImageSourceConverter x:Key="ConverterUrlToImageSource" />
+
+    <converter:DateTimeToStringWithDefaultStringConverter x:Key="DateTimeToStringWithDefaultStringConverter" DateOnly="True" />
+    <converter:DateTimeToStringWithDefaultStringConverter x:Key="DateTimeToStringConverter" />
+    <baseConverter:InvertedBooleanConverter x:Key="InvertedBooleanConverter" />
+    <converter:DoubleToHoursConverter x:Key="DoubleToHoursConverter" />
+
+</ResourceDictionary>

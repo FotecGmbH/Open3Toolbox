@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base1:BaseMenu
+    x:Class="BaseApp.ViewMenu"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Biss.Apps.ViewModel;assembly=Biss.Apps"
+    xmlns:base1="clr-namespace:Biss.Apps.XF.Navigation.Base;assembly=Biss.Apps.XF"
+    xmlns:constants="clr-namespace:Exchange;assembly=Exchange"
+    xmlns:converter="clr-namespace:Biss.Apps.Converter;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iOsSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:markupExtensions="clr-namespace:BaseApp.MarkupExtensions;assembly=BaseApp.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title="{x:Static constants:Constants.MainTitle}"
+    d:DataContext="{x:Static viewModel:VmMenu.DesignInstance}"
+    iOsSpecific:Page.UseSafeArea="True"
+    BackgroundColor="{StaticResource MainColor}"
+    mc:Ignorable="d">
+
+    <base1:BaseMenu.Resources>
+
+        <converter:BooleanValueConverter
+            x:Key="BackgroundColorConverter"
+            FalseValue="Transparent"
+            TrueValue="{StaticResource AccentColor}" />
+        <converter:BooleanValueConverter
+            x:Key="LabelColorConverter"
+            FalseValue="{StaticResource AccentColor}"
+            TrueValue="White" />
+    </base1:BaseMenu.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="30" />
+        </Grid.RowDefinitions>
+
+        <!--  Bild und Titel im Menü  -->
+        <Grid
+            Grid.Row="0"
+            BackgroundColor="{StaticResource MainColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="10" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="10" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="25" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="20" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="1"
+                Grid.Column="2"
+                FontFamily="{StaticResource SourceSansProRegular}"
+                FontSize="{StaticResource BigSize}"
+                Text="{markupExtensions:Translate ResViewInfo.SubTitle}"
+                TextColor="{StaticResource AccentColor}"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <!--  Dynamisches Menü  -->
+        <ListView
+            x:Name="ListViewMenuItems"
+            Grid.Row="1"
+            HasUnevenRows="true"
+            ItemsSource="{Binding CmdAllMenuCommands}"
+            SelectedItem="{Binding CmdAllMenuCommands.SelectedItem, Mode=TwoWay}"
+            SelectionMode="Single">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Grid
+                                BackgroundColor="{Binding IsSelected, Converter={StaticResource BackgroundColorConverter}}">
+                                <Grid
+                                    Padding="15,10"
+                                    d:DataContext="{x:Static base:VmCommandSelectable.DesignInstance}"
+                                    HorizontalOptions="FillAndExpand"
+                                    IsEnabled="{Binding CanExecuteProperty}"
+                                    IsVisible="{Binding CanExecuteProperty}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="Auto" />
+                                        <ColumnDefinition
+                                            Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Column="0"
+                                        FontFamily="{x:StaticResource StreamLineIcons}"
+                                        FontSize="24"
+                                        Text="{Binding Glyph}"
+                                        TextColor="{Binding IsSelected, Converter={StaticResource LabelColorConverter}}"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center" />
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="24"
+                                        Text="{Binding DisplayName}"
+                                        TextColor="{Binding IsSelected, Converter={StaticResource LabelColorConverter}}"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</base1:BaseMenu>

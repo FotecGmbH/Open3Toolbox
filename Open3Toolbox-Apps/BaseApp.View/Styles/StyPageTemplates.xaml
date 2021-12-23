@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="BaseApp.Styles.StyPageTemplates"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:baseApp="clr-namespace:BaseApp;assembly=BaseApp"
+    xmlns:baseStyles="clr-namespace:Biss.Apps.Styles;assembly=Biss.Apps.XF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:styles="clr-namespace:BaseApp.Styles;assembly=BaseApp.View"
+    mc:Ignorable="d">
+
+    <ResourceDictionary.MergedDictionaries>
+        <styles:StyColors />
+        <baseStyles:StyConverter />
+        <styles:StyFonts />
+        <styles:StyFontSizes />
+        <styles:StyLayout />
+        <styles:StyExplicitStyles />
+        <styles:StyImplicitStyles />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region MainPageTemplate - für Seiten mit/im Hauptmenü-->
+    <ControlTemplate x:Key="MainPageTemplate">
+        <Grid
+            d:DataContext="{x:Static baseApp:DesignVmBase.DesignInstance}"
+            BackgroundColor="{StaticResource BackgroundColor}"
+            BindingContext="{TemplateBinding BindingContext}"
+            ColumnSpacing="0"
+            RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--#region  Warning oder Error-->
+            <Grid
+                Grid.Row="0"
+                BackgroundColor="Red"
+                IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    HorizontalOptions="Center"
+                    IsVisible="True"
+                    Text="Verbindung verloren!"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region  Content-->
+            <Grid
+                Grid.Row="1"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}"
+                Opacity="{Binding IsBusy, Converter={StaticResource BooleanToOpacityConverter}}">
+                <ContentPresenter HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region  Busy-->
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                IsVisible="{Binding IsBusy}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource MainColor}" />
+                </Grid>
+                <Label
+                    Grid.Row="3"
+                    FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding BusyContent}" />
+            </Grid>
+            <!--#endregion-->
+
+        </Grid>
+    </ControlTemplate>
+
+    <!--#endregion-->
+
+
+</ResourceDictionary>

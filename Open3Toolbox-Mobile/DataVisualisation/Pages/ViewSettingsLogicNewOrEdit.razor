@@ -1,0 +1,164 @@
+﻿@page "/ViewSettingsLogicNew"
+@page "/ViewSettingsLogicEdit/{Id}"
+@inject HttpClient Http
+@using Newtonsoft.Json
+@inject NotificationService NotificationService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
+
+<PageTitle>Physikalische Ansicht</PageTitle>
+<div class="row">
+    @if(LstMeasurements != null)
+    {
+        <RadzenCard class="mt-2 col-md-12 col-lg-6 p-2">
+        <div class="col-12">
+            <h2>@Title</h2>
+                <div>
+                    <div class="input-group mb-3">
+                      <label class="form-label">Name</label>
+                      <RadzenTextBox class="form-control" Placeholder="Name hier eingeben ..." @bind-Value=@Name></RadzenTextBox>
+                    </div>
+                </div>
+                <label>Messstellen</label>
+                <RadzenListBox AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                @bind-Value=@SelectedMeasurements 
+                Multiple="true" 
+                Data=@LstMeasurements
+                TextProperty="Name" 
+                ValueProperty="Id" 
+                Class="w-100" />
+                
+            
+            <RadzenButton Text="@ButtonSaveText" class="float-right mt-3 mb-2" Click=@(a => createLogicView())></RadzenButton>
+        </div>
+        </RadzenCard>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public string Name { get; set; }
+    public string Title { get; set; }
+
+    public string ButtonSaveText { get; set; }
+
+    public List<ExUserLogicView> LstUserLogicViews { get; set; }
+
+    public IEnumerable<Measurement> LstMeasurements { get; set; }
+    IEnumerable<long> SelectedMeasurements;
+
+    IEnumerable<Project> projects;
+    string baseUrl = "https://localhost:5003/";
+
+    object selection;
+    MeasurementValue measurement = null;
+
+    private async void createLogicView()
+    {
+        if(String.IsNullOrEmpty(Name))
+        {
+            NotificationService.Notify(new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Duration = 4000,
+                    Summary = "Eingabe erforderlich!",
+                    Detail = "Name muss eingegeben und mind. ein Messwert muss ausgewählt werden!"
+                });
+        }
+        else
+        {
+            int nextId = 1;
+
+            if(LstUserLogicViews == null)
+            {
+                LstUserLogicViews = new List<ExUserLogicView>();
+            }
+            else
+            {
+                nextId = LstUserLogicViews.Select(a => a.Id).Max();    
+            }
+            ExUserLogicView ul;
+
+            if(String.IsNullOrEmpty(Id))
+            {
+                ul = new ExUserLogicView()
+                {
+                    Id = nextId, //-1 = NICHT IN EINER DB
+                    Name = Name,
+                    UserLogicViews = new List<ExLogicViewMeasurement>()
+                };
+
+                LstUserLogicViews.Add(ul);
+            }
+            else
+            {
+                int IdAsInt = int.Parse(Id);
+                ul = LstUserLogicViews.FirstOrDefault(a => a.Id == IdAsInt);
+                ul.Name = Name;
+            }
+
+            ul.UserLogicViews.Clear();
+
+            foreach(var i in SelectedMeasurements)
+            {
+                ul.UserLogicViews.Add(new ExLogicViewMeasurement()
+                    {
+                        Id = i,
+                        Name = LstMeasurements.FirstOrDefault(a => a.Id == i).Name,
+                        Icon = "?"
+                    });
+            }
+
+            await localStorage.SetItemAsync("logicViews",JsonConvert.SerializeObject(LstUserLogicViews));
+            NavigationManager.NavigateTo("viewSettingsLogic");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var logicViews = await localStorage.GetItemAsync<string>("logicViews");
+        if(!String.IsNullOrEmpty(logicViews))
+        {
+            try
+            {
+                LstUserLogicViews = JsonConvert.DeserializeObject<List<ExUserLogicView>>(logicViews);
+            }
+            catch
+            {
+                LstUserLogicViews = null;
+                await localStorage.SetItemAsync("logicViews","");
+            }
+        }
+
+        if(!String.IsNullOrEmpty(Id))
+        {
+            int IdAsInt = int.Parse(Id);
+            var ul = LstUserLogicViews.FirstOrDefault(a => a.Id == IdAsInt);   
+
+            ButtonSaveText = "Speichern";
+            Title = "Logische Ansicht bearbeiten";
+            Name = ul.Name;
+            SelectedMeasurements = ul.UserLogicViews.Select(a => a.Id).ToList();
+        }
+        else
+        {
+            Title = "Neue logische Ansicht";
+            ButtonSaveText = "Anlegen";
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Client c = new Client(baseUrl, Http);
+
+        projects = await c.ProjectsAllAsync();
+        LstMeasurements = projects.SelectMany(a => a.Gateways).SelectMany(a => a.Sensors).SelectMany(a => a.Interfaces).SelectMany(a => a.Chips).SelectMany(a => a.Measurements).ToList();
+
+        await base.OnParametersSetAsync();
+    }
+
+}

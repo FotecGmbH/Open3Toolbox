@@ -1,0 +1,33 @@
+﻿@page "/dev"
+
+@using WebServer.Models
+
+@*@attribute [Authorize]*@
+
+@inject LoginModel User
+@inject NavigationManager NavigationManager
+
+<h3>DeveloperPage</h3>
+
+<p>Feel free to play around...</p>
+
+@code {
+
+    /// <summary>
+    /// Method invoked when the component is ready to start, having received its
+    /// initial parameters from its parent in the render tree.
+    /// Override this method if you will perform an asynchronous operation and
+    /// want the component to refresh when that operation is completed.
+    /// </summary>
+    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing any asynchronous operation.</returns>
+    protected override Task OnInitializedAsync()
+    {
+        if (!User.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return Task.CompletedTask;
+        }
+
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,647 @@
+@page "/databasedevices"
+@*@attribute [Authorize]*@
+
+@inject LoginModel User
+@inject NavigationManager NavigationManager
+
+@using Database;
+@using Database.Tables;
+@using Exchange;
+@using Microsoft.EntityFrameworkCore;
+@using Telerik.Blazor
+@using Telerik.Blazor.Components;
+@using WebServer.Models
+@using WebServer.Resources
+@using Biss.Apps.Service.Push;
+@using Database.Context
+@using WebExchange 
+
+
+<h1>@ResViewDatabaseDevices.Header</h1>
+
+<p>@ResViewDatabaseDevices.Description</p>
+
+<!--Window for push notifying-->
+<TelerikWindow @bind-Visible="@showPushWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (chosenDevice is null)
+            {
+                <strong>@ResViewDatabaseDevices.Btn_SendPushToAll</strong>
+            }
+            else
+            {
+                string titleText = ResViewDatabaseDevices.Btn_SendPushToCertain + " an: ";
+
+                if (!string.IsNullOrWhiteSpace(chosenDevice.DeviceName))
+                {
+                    titleText += chosenDevice.DeviceName + ", ";
+                }
+
+                titleText += ResViewDatabaseDevices.Col_Device_Id + ": " + chosenDevice.Id;
+
+                if (!(chosenDevice.TblUser is null))
+                {
+                    titleText += ", Benutzer: " + chosenDevice.TblUser.LoginName;
+                }
+
+                <strong>@titleText</strong>
+            }
+        }
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HidePushWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        <div class="text-center w-100">
+            <TelerikTextBox @bind-Value="@messageTitle" Label="@ResViewDatabaseDevices.lable_messagetitel" Width="100%" />
+            <TelerikTextArea @bind-Value="@messageText" Label="@ResViewDatabaseDevices.lable_messagetext" PlaceHolder="Geben Sie die Push Nachricht ein" Width="100%" AutoSize="true" />
+            <button class="btn btn-primary m-5" type="button" @onclick="@(() => SendPush(chosenDevice))">
+                @ResViewDatabaseUser.Command_SendPush
+            </button>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!--Window for dc notifying-->
+<TelerikWindow @bind-Visible="@showDcWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (chosenDevice is null)
+            {
+                <strong>@ResViewDatabaseDevices.Btn_SendDcToAll</strong>
+            }
+            else
+            {
+                string titleText = ResViewDatabaseDevices.Btn_SendDcToCertain + " an: ";
+
+                if (!string.IsNullOrWhiteSpace(chosenDevice.DeviceName))
+                {
+                    titleText += chosenDevice.DeviceName + ", ";
+                }
+
+                titleText += ResViewDatabaseDevices.Col_Device_Id + ": " + chosenDevice.Id;
+
+                if (!(chosenDevice.TblUser is null))
+                {
+                    titleText += ", Benutzer: " + chosenDevice.TblUser.LoginName;
+                }
+
+                <strong>@titleText</strong>
+            }
+        }
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HideDcWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        <div class="text-center w-100">
+            <TelerikTextArea @bind-Value="@messageText" Label="@ResViewDatabaseDevices.lable_messagetext" PlaceHolder="Geben Sie die Push Nachricht ein" Width="100%" AutoSize="true" />
+            <button class="btn btn-primary m-5" type="button" @onclick="@(() => SendDc(chosenDevice))">
+                @ResViewDatabaseUser.Btn_SendDcToCertain
+            </button>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<!--Window for user data-->
+<TelerikWindow @bind-Visible="@showChosenUserDataWindow" Width="50vw" Height="50vh" Centered="true" Modal="true">
+    <WindowTitle>
+        @{
+            if (!(chosenDevice is null) && !(chosenDevice.TblUser is null))
+            {
+                <strong>@chosenDevice.TblUser.LoginName</strong>
+            }
+        }
+    </WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@(() => HideUserDataWindow())"></WindowAction>
+    </WindowActions>
+    <WindowContent>
+        @{
+            if (!(chosenDevice is null) && !(chosenDevice.TblUser is null))
+            {
+                <div>
+                    <label for="id"><strong>@ResViewDatabaseUser.Col_Id:</strong></label>
+                    <label id="id">@chosenDevice.TblUser.Id</label>
+                </div>
+                <div>
+                    <label for="username"><strong>@ResViewDatabaseUser.Col_UserName:</strong></label>
+                    <label id="username">@chosenDevice.TblUser.LoginName</label>
+                </div>
+
+            }
+        }
+    </WindowContent>
+</TelerikWindow>
+
+
+
+
+<!--App Versionen Manipulierung-->
+<p>@ResViewDatabaseDevices.AppVersion_Description</p>
+
+<!--Send Push to all available Devices-->
+<button class="btn btn-primary" type="button" @onclick="@(() => ShowPushWindow())">
+    <TelerikIcon Icon="@IconName.Notification" />
+    @ResViewDatabaseDevices.Btn_SendPushToAll
+</button>
+
+<!--Send Dc to all available Devices-->
+<button class="btn btn-primary" type="button" @onclick="@(() => ShowDcWindow())">
+    <TelerikIcon Icon="@IconName.Connector" />
+    @ResViewDatabaseDevices.Btn_SendDcToAll
+</button>
+
+<!--Grid presentation of data-->
+<TelerikGrid Data="_devices" Sortable="true" Height="70vh" FilterMode="GridFilterMode.FilterMenu">
+    <GridToolBar>
+        <GridSearchBox />
+    </GridToolBar>
+    <GridColumns>
+        <GridColumn Field="@nameof(TableDevice.Id)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_Id
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.Id
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.Plattform)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Platform
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.Plattform
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.OperatingSystemVersion)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @string.Concat(ResViewDatabaseDevices.Col_Os_Version.TakeWhile(c => c != ' ')) <br />
+                    @string.Concat(ResViewDatabaseDevices.Col_Os_Version.SkipWhile(c => c != ' '))
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.OperatingSystemVersion
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.Manufacturer)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_Manufacturer
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.Manufacturer
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.Model)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_Model
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.Model
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.DeviceName)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_Name
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.DeviceName
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.DeviceType)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_Type
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.DeviceType
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.DeviceToken)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_PushToken
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center w-100 overflowBreakWord">
+                            @if (string.IsNullOrWhiteSpace(currentDevice.DeviceToken))
+                            {
+                                <span>nicht vorhanden</span>
+                            }
+                            else
+                            {
+                                @*<span class="clickable" title="@currentDevice.DeviceToken">vorhanden</span>*@
+                                <span>@currentDevice.DeviceToken</span>
+                            }
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.DeviceHardwareId)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Device_HardwareId
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.DeviceHardwareId
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.IsAppRunning)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Is_App_Running
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @if (currentDevice.IsAppRunning)
+                            {
+                                <img src="/Content/switch-on-32.png" />
+                            }
+                            else
+                            {
+                                <img src="/Content/switch-off-32.png" />
+                            }
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.TblUserId)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_User
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        if (currentDevice.TblUser is null)
+                        {
+                            <div class="text-center text-danger">
+                                Kein Benutzer
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center text-success clickable" @onclick="@(e => ShowUserData(currentDevice))">
+                                ID: @currentDevice.TblUser.Id <br /> @(currentDevice.TblUser.LoginName)
+                            </div>
+                        }
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.LastDateTimeUtcOnline)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_Last_Time_Online
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.LastDateTimeUtcOnline
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field="@nameof(TableDevice.AppVersion)">
+            <HeaderTemplate>
+                <div class="text-center">
+                    @ResViewDatabaseDevices.Col_App_Version
+                </div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            @currentDevice.AppVersion
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Title="" Sortable="false">
+            <Template>
+                @{
+                    if (context is TableDevice currentDevice)
+                    {
+                        <div class="text-center">
+                            <button class="btn btn-primary colButton" type="button" @onclick="@(() => ShowPushWindow(currentDevice))" title="@ResViewDatabaseDevices.Btn_SendPushToCertain">
+                                <TelerikIcon Icon="@IconName.Notification" />
+                            </button>
+                            <button class="btn btn-primary colButton" disabled="@(!currentDevice.IsAppRunning)" type="button" @onclick="@(() => ShowDcWindow(currentDevice))" title="@ResViewDatabaseDevices.Btn_SendDcToCertain">
+                                <TelerikIcon Icon="@IconName.Connector" />
+                            </button>
+                        </div>
+                    }
+                }
+            </Template>
+        </GridColumn>
+    </GridColumns>
+</TelerikGrid>
+
+
+<style>
+    .clickable {
+        cursor: pointer;
+    }
+
+        .clickable:hover {
+            font-weight: 900;
+        }
+
+    .overflowBreakWord {
+        overflow-wrap: break-word;
+    }
+
+    .colButton {
+        width: 40%;
+    }
+</style>
+
+@code {
+    #region GridPresentation & Notification
+    private string profileImageAPIURL = "http://localhost:53019/api/" + "GetFile/"; // Constants.ServiceClientEndPointWithApiPrefix + "GetFile/";
+
+    //Geräteliste
+    private List<TableDevice> _devices;
+
+    // Notification Text
+    string messageText { get; set; } = standardMessageText;
+
+    // Notification Title
+    string messageTitle { get; set; } = standardMessageTitle;
+
+    const string standardMessageText = "Das ist ein toller Nachrichten-Text";
+
+    const string standardMessageTitle = "Das ist ein toller Nachrichten-Titel";
+
+    // Zeige das Fenster für alle benachrichtigen
+    bool showPushWindow { get; set; }
+
+    // Zeige das Fenster für einen benachrichtigen
+    //bool showPushToDeviceWindow { get; set; }
+
+    // Zeige das Fenster für alle benachrichtigen
+    bool showDcWindow { get; set; }
+
+    // Zeige das Fenster für einen benachrichtigen
+    //bool showDcToDeviceWindow { get; set; }
+
+    //Zeige Fenster für Daten des Users des ausgewählten Gerätes
+    bool showChosenUserDataWindow { get; set; }
+
+    // UserID zum senden der Benachrichtigung
+    private TableDevice chosenDevice { get; set; }
+
+    public string CurrentVersion { get; set; }
+
+    public string InfoVersion { get; set; }
+
+    public string MinVersion { get; set; }
+
+
+    /// <summary>
+    /// Methode beim Öffnen der Seite
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+        if (!User.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        base.OnInitializedAsync();
+
+        try
+        {
+            //Daten werden aus der Datenbank geholt
+            using (var db = new DatabaseContext(WebConstants.ConnectionString))
+            {
+                CurrentVersion = AppSettings.Current().AppVersion;
+                InfoVersion = db.TblSettings.FirstOrDefault()?.AppVersionInfo;
+                MinVersion = db.TblSettings.FirstOrDefault()?.AppVersionError;
+
+                _devices = new List<TableDevice>(db.TblDevices.Include(x => x.TblUser).ThenInclude(x => x.TblUserImage));
+                showPushWindow = false;
+                showDcWindow = false;
+            }
+        }
+        catch(Exception e)
+        {
+            Logging.Log.LogError($"{e}");
+            _devices = new List<TableDevice>();
+        }
+    }
+
+    /// <summary>
+    /// Daten des Users einblenden.
+    /// </summary>
+    /// <param name="device"></param>
+    private void ShowUserData(TableDevice device)
+    {
+        if (device is null) return;
+
+        chosenDevice = device;
+
+        showChosenUserDataWindow = true;
+    }
+
+    private void HideUserDataWindow()
+    {
+        showChosenUserDataWindow = false;
+    }
+
+    /// <summary>
+    /// Window für Push wird geöffnet.
+    /// </summary>
+    /// <param name="device">Omit this parameter to initiate a push to all devices.</param>
+    private void ShowPushWindow(TableDevice device = null)
+    {
+        if (device is null)
+        {
+            showPushWindow = true;
+            return;
+        }
+
+        chosenDevice = device;
+
+        showPushWindow = true;
+    }
+
+    /// <summary>
+    /// Window für Dc Nachricht wird geöffnet.
+    /// </summary>
+    /// <param name="device">Omit this parameter to initiate a Dc message to all devices.</param>
+    private void ShowDcWindow(TableDevice device = null)
+    {
+        if (device is null)
+        {
+            showDcWindow = true;
+            return;
+        }
+
+        chosenDevice = device;
+
+        showDcWindow = true;
+    }
+
+
+    /// <summary>
+    /// Push Nachrichten Fenster schließen
+    /// </summary>
+    private void HidePushWindow()
+    {
+        showPushWindow = false;
+
+        messageTitle = standardMessageTitle;
+        messageText = standardMessageText;
+
+        chosenDevice = default;
+    }
+
+    /// <summary>
+    /// Dc Nachrichten Fenster schließen
+    /// </summary>
+    private void HideDcWindow()
+    {
+        showDcWindow = false;
+
+        messageTitle = standardMessageTitle;
+        messageText = standardMessageText;
+
+        chosenDevice = default;
+    }
+
+    /// <summary>
+    /// Benachrichtige über Push
+    /// </summary>
+    private async void SendPush(TableDevice device = null)
+    {
+        PushResult result = null;
+
+        if (device is null)
+        {
+            result = await PushService.Instance.SendBroadcast(messageTitle, messageText).ConfigureAwait(true);
+        }
+        else
+        {
+            if (!string.IsNullOrWhiteSpace(device.DeviceToken))
+                result = await PushService.Instance.SendMessageToDevice(messageTitle, messageText, device.DeviceToken).ConfigureAwait(true);
+        }
+
+        HidePushWindow();
+    }
+
+    /// <summary>
+    /// Benachrichtige über Dc
+    /// </summary>
+    private void SendDc(TableDevice device = null)
+    {
+        if (device is null)
+        {
+            //Todo send DC to all devices
+            foreach (var d in _devices)
+            {
+
+            }
+        }
+        else
+        {
+            //Todo send DC to device
+        }
+
+        HideDcWindow();
+    }
+
+    #endregion
+}
+
+

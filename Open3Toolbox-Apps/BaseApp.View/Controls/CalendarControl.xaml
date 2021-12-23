@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="BaseApp.Controls.CalendarControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
+    x:Name="CalendarControlBase">
+    <ContentView.Content>
+        <input:RadCalendar
+            x:Name="RadCal"
+            AppointmentsSource="{Binding Appointments}"
+            BindingContext="{x:Reference CalendarControlBase}"
+            DisplayDateChanged="RadCalendar_OnDisplayDateChanged"
+            HeightRequest="120"
+            SelectionChanged="RadCalendar_OnSelectionChanged"
+            SelectionMode="Single"
+            ViewMode="Week">
+            <input:RadCalendar.DayCellStyle>
+                <input:CalendarCellStyle BackgroundColor="White" TextColor="{StaticResource AccentColor}" />
+            </input:RadCalendar.DayCellStyle>
+
+            <input:RadCalendar.DayNameCellStyle>
+                <input:CalendarCellStyle BackgroundColor="White" TextColor="{StaticResource AccentColor}" />
+            </input:RadCalendar.DayNameCellStyle>
+
+            <input:RadCalendar.TodayCellStyle>
+                <input:CalendarCellStyle
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource AccentColor}"
+                    BorderThickness="2"
+                    TextColor="{StaticResource AccentColor}" />
+            </input:RadCalendar.TodayCellStyle>
+
+            <input:RadCalendar.WeekNumberCellStyle>
+                <input:CalendarCellStyle BackgroundColor="Transparent" TextColor="{StaticResource AccentColor}" />
+            </input:RadCalendar.WeekNumberCellStyle>
+
+            <input:RadCalendar.DisabledCellStyle>
+                <input:CalendarCellStyle BackgroundColor="Transparent" TextColor="{StaticResource GrayColor}" />
+            </input:RadCalendar.DisabledCellStyle>
+
+            <input:RadCalendar.SelectedCellStyle>
+                <input:CalendarCellStyle
+                    BackgroundColor="White"
+                    BorderColor="{StaticResource MainColor}"
+                    BorderThickness="2"
+                    FontSize="20"
+                    TextColor="{StaticResource MainColor}" />
+            </input:RadCalendar.SelectedCellStyle>
+
+            <input:RadCalendar.WeekendCellStyle>
+                <input:CalendarCellStyle BackgroundColor="Transparent" TextColor="{StaticResource ErrorColor}" />
+            </input:RadCalendar.WeekendCellStyle>
+
+            <input:RadCalendar.OtherMonthCellStyle>
+                <input:CalendarCellStyle BackgroundColor="Transparent" TextColor="{StaticResource AccentColor}" />
+            </input:RadCalendar.OtherMonthCellStyle>
+        </input:RadCalendar>
+    </ContentView.Content>
+</ContentView>

@@ -1,0 +1,27 @@
+﻿@page "/viewadminmain"
+@page "/viewadminmain/{Id:int}"
+@using BaseApp
+@using Exchange.Resources.ResAdminApps
+
+@inherits ProjectRazorPage<VmAdminMain>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title=@ResViewAdminMain.Title>
+    <img src="content/Open3Toolbox.png" style="width:200px;margin-bottom: 20px;" />
+    <p>
+        Wir sind das Forschungsunternehmen der FHWN und im Bereich für BISS tätig. Die Motivation hinter dem Projekt ist es, die Entwicklung und den Betrieb, eines IoT-Systems zu vereinfachen. Dabei ist das Ziel ein Baukastensystem für Hardware, Datentransport und Sicherung zur Verfügung zu stellen.
+
+        SW/HW Entwickler können den Baukasten nutzen, um einzelnen Komponenten eines IoT-Systems zu entwickeln. KMUs und Agrarbereich können mithilfe des Baukastens in kurzer Zeit Probleme mittels IoT lösen und neue Produkte innovieren.
+
+        Kommunen können die gesammelten Daten auslesen, visualisieren und für verschiedene digitale Dienste in der Gemeinde den Bürgern zur Verfügung stellen.
+
+        Die Anzahl verfügbarer Komponenten für ein IoT-System hat sich in den letzten Jahren vervielfacht. Durch 5G wird mit über 3 Mrd. IoT Geräten im Jahr 2023 gerechnet. Dies erweitert zwar den Anwendungsbereich, in dem ein solches System einsetzbar ist, gleichzeitig wird aber die Konfiguration der einzelnen Komponenten aufwendiger. Für viele der Geräte sind mehrere Schritte nötig, um sie in ein laufendes System einzubinden. Einige dieser Schritte sollen im Zuge dieses Projekts automatisiert werden.
+
+        Im Zuge des Projekts werden unterschiedliche SDKs und Hardware Komponenten entwickelt, die auf allen gängigen Plattformen funktionieren. Das löst das Problem, dass man nicht bei jedem IoT Projekt von „Null“ beginnen muss. Im Wesentlichen steht am Projektende ein offener Weg zur Verfügung, um die Daten ohne viel weiteren Entwicklungsaufwand zu verarbeiten.
+    </p>
+    <a href="https://www.netidee.at/open3-toolbox">https://www.netidee.at/open3-toolbox</a>
+
+</CardContainer>

@@ -1,0 +1,46 @@
+﻿@page "/gatewayConnector"
+@page "/gatewayConnector/{Id:int}"
+
+@using Exchange.Resources.ResConfigurationTool
+@using Exchange.Model.ConfigurationTool
+@using Exchange.Model.ConfigurationTool.Interfaces
+@using Biss.Dc.Client
+
+@inherits ProjectRazorPage<BaseApp.ViewModel.ConfigurationTool.VmGatewayConnector>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<ToastControl Item="@Toast"></ToastControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+
+<CardContainer Title="@ResViewGatewayConnector.Title">
+    <div class="container-fluid">
+        <div class="row m-2 d-flex flex-row flex-nowrap justify-content-between">
+            <h3>@ResViewGatewayConnector.GatewaysOf @this.ViewModel.Project.Name</h3>
+            <button class="btn btn-primary"
+                    @onclick="@(() => this.ViewModel.CmdToSensorConnectorView.Execute(null))"
+                    disabled="@(!this.ViewModel.CmdToSensorConnectorView.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap align-items-center">
+                    @this.ViewModel.CmdToSensorConnectorView.DisplayName
+                    <span class="mx-1" />
+                    @AdminWebApp.Client.Components.IconProvider.RenderWifiIcon()
+                </span>
+            </button>
+        </div>
+        <div class="row m-2 justify-content-around">
+            <div class="my-2 col col-md-5">
+                <RadzenListBox Data="this.ViewModel.FreeGateways" Style="width:100%" @bind-Value="this.ViewModel.SelectedGateway" />
+            </div>
+        </div>
+        <div class="row m-2 d-flex justify-content-center">
+            <button class="btn btn-success" @onclick="@(() => this.ViewModel.CmdDownloadGatewaySettings.Execute(null))" disabled="@(!this.ViewModel.CmdDownloadGatewaySettings.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap align-items-center">
+                    @this.ViewModel.CmdDownloadGatewaySettings.DisplayName
+                    <span class="mx-1" />
+                    @AdminWebApp.Client.Components.IconProvider.RenderWifiIcon()
+                </span>
+            </button>
+        </div>
+    </div>
+    </CardContainer>
+    @code {
+    }

@@ -1,0 +1,65 @@
+﻿@page "/migrations"
+@*@attribute [Authorize]*@
+
+@inject LoginModel User
+@inject NavigationManager NavigationManager
+
+@using Database;
+@using Microsoft.EntityFrameworkCore;
+@using WebServer.Models
+@using WebServer.Resources
+@using Database.Context
+@using WebExchange 
+
+<!--Header der Page-->
+<h1>@ResViewDatabaseMigrations.Header</h1>
+
+<!--Beschreibung der Page-->
+<p>@ResViewDatabaseMigrations.Descripton?</p>
+
+<!--Ansicht aller aktueller Migrationen-->
+<TelerikGrid Data="_migrations">
+    <GridColumns>
+        <GridColumn Field="@nameof(Tuple<string, string>.Item1)" Title="@ResViewDatabaseMigrations.TableDescription" />
+    </GridColumns>
+</TelerikGrid>
+
+@code {
+    /// <summary>
+    /// Liste der Migrationen
+    /// </summary>
+    private List<Tuple<string, string>> _migrations;
+
+    /// <summary>
+    /// Initialisierungsmethode
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnInitializedAsync()
+    {
+        if (!User.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return Task.CompletedTask;
+        }
+
+        base.OnInitializedAsync();
+
+        try
+        {
+            using (var db = new DatabaseContext(WebConstants.ConnectionString))
+            {
+                _migrations = db.Database.GetAppliedMigrations().Select(x => new Tuple<string, string>(x, x)).ToList();
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Log.LogError($"{e}");
+            _migrations = new List<Tuple<string, string>>()
+                          {
+                              new Tuple<string, string>("Error:" + e, string.Empty)
+                          };
+        }
+
+        return Task.CompletedTask;
+    }
+}

@@ -1,0 +1,44 @@
+﻿@page "/viewStatistic"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Statistik</PageTitle>
+<div class="row">
+    @if(LstMeasurements != null)
+    {
+        foreach(var measurement in LstMeasurements)
+        {
+            <div class="col-md-6 col-sm-12 col-lg-4 p-2">
+
+             <RadzenCard  class="mt-2">
+                    <div>
+                        <RadzenIcon Icon="lightbulb"></RadzenIcon>
+                        <h3 class="mb-0"><span class="badge bg-primary text-white">@measurement.Name</span> <span class="badge bg-secondary text-white">ID @measurement.Id</span></h3>
+                        
+                        <RadzenButton Text="Historische Werte" Click="@(a => NavigationManager.NavigateTo($"ViewHistoricalData/{measurement.Id}"))" class="btn-success mt-2"></RadzenButton>
+                        @*<RadzenButton Text="Anzeigen" Click="@(a => NavigationManager.NavigateTo($"ViewDataForLogicView/{logicView.Id}"))" class="btn-success" ></RadzenButton>*@
+                    </div>
+             </RadzenCard>
+             </div>
+        }
+    }
+ </div>
+
+@code {
+    public IEnumerable<Measurement> LstMeasurements { get; set; }
+    IEnumerable<long> SelectedMeasurements;
+
+    IEnumerable<Project> projects;
+    string baseUrl = "https://localhost:5003/";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Client c = new Client(baseUrl, Http);
+
+        projects = await c.ProjectsAllAsync();
+        LstMeasurements = projects.SelectMany(a => a.Gateways).SelectMany(a => a.Sensors).SelectMany(a => a.Interfaces).SelectMany(a => a.Chips).SelectMany(a => a.Measurements).ToList();
+
+        await base.OnParametersSetAsync();
+    }
+
+}

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="BaseApp.Controls.Footer"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:baseApp="clr-namespace:BaseApp;assembly=BaseApp"
+    xmlns:controls="clr-namespace:BaseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:primitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    d:DataContext="{x:Static baseApp:DesignVmBase.DesignInstance}"
+    mc:Ignorable="d">
+    <ContentView.Content>
+        <Grid
+            BackgroundColor="{StaticResource AccentColor}"
+            ColumnSpacing="0"
+            IsEnabled="{Binding IsBusy, Converter={x:StaticResource InvertedBooleanConverter}}"
+            Opacity="{Binding IsBusy, Converter={x:StaticResource BooleanToOpacityConverter}}"
+            RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+
+            <controls:FooterButton
+                Grid.Row="2"
+                Grid.Column="0"
+                BissCommand="{Binding CmdHistory}" />
+
+            <controls:FooterButton
+                Grid.Row="2"
+                Grid.Column="1"
+                BissCommand="{Binding CmdStatistics}" />
+
+            <controls:FooterButton
+                Grid.Row="2"
+                Grid.Column="2"
+                BissCommand="{Binding CmdHome}" />
+
+            <controls:FooterButton
+                Grid.Row="2"
+                Grid.Column="3"
+                BissCommand="{Binding CmdToDo}" />
+
+            <controls:FooterButton
+                Grid.Row="2"
+                Grid.Column="4"
+                BissCommand="{Binding CmdMenuFooter}"
+                IsSelectedVisible="False" />
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

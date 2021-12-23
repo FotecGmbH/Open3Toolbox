@@ -1,0 +1,84 @@
+﻿@using System.Reflection
+@using System.Collections
+@using System.Text.RegularExpressions
+@using Biss.Serialize
+@using Exchange.Model.ConfigurationTool
+@using Exchange.Model.ConfigurationTool.Interfaces
+@using Exchange.Services.ConfigurationTool
+@using ExConfigExchange.Models
+@using ExConfigExchange.Models.Interfaces
+@using ExConfigExchange.Services
+@using Exchange.Resources.ResConfigurationTool
+@using Microsoft.AspNetCore.Components
+
+@typeparam T
+
+@this.RenderFields
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        this.DataPoint.BeginEdit();
+        this.OriginalName = this.DataPoint.Data.Name;
+        this.RefreshCanSaveChanges();
+    }
+
+    private void RefreshCanSaveChanges()
+    {
+        // The Observable Dictionary did not want to work for some reason, so...
+        this.DataPoint.State = Biss.Dc.Core.EnumDcListElementState.Modified;
+        this.CanSaveChanges = this.DataPoint.Data.Configuration.All(kv => kv.Value.Accept(this._validationVisitor));
+        this.StateHasChanged();
+    }
+}
+
+@functions
+{       private RenderFragment RenderFields =>
+    @<div class="m-2">
+        <div class="m-2 form-group">
+            <label>@ResViewConfigurableEditorComponent.Field_Name</label>
+            <input type="text" class="form-control" @bind-value="this.DataPoint.Data.Name" />
+        </div>
+
+        <div class="m-2 form-group">
+            <label>@ResViewConfigurableEditorComponent.Field_Description</label>
+            <textarea class="form-control" @bind="this.DataPoint.Data.Description" />
+        </div>
+
+        @foreach (var field in this.DataPoint.Data.Configuration.Values)
+        {
+            @this.RenderIExConfigField(field)
+        }
+
+        <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-danger" @onclick="this.OpenDeletePrompt">
+                @IconProvider.RenderDeleteIcon()
+                @this.OriginalName @ResViewConfigurableEditorComponent.Cmd_Delete
+            </button>
+            <button class="btn btn-success" @onclick="this.SaveChanges" disabled="@(!this.CanSaveChanges)">
+                @IconProvider.RenderSaveIcon()
+                @ResViewConfigurableEditorComponent.Cmd_Save
+            </button>
+        </div>
+    </div>;
+
+   private RenderFragment RenderIExConfigField(IExConfigItem field) =>
+@<ExConfigItemBlazorUIVisitor ToRender="field" ValidateCallBack="this.RefreshCanSaveChanges" />;
+
+private async Task OpenDeletePrompt()
+{
+var result = (bool?)await this.DialogService.OpenAsync(ResViewCommon.PromptTitle_Choose, ds =>
+@<div>
+    <p class="text-center">@ResViewConfigurableEditorComponent.PromptMsg_Delete @this.DataPoint.Data.Name?</p>
+    <div class="d-flex justify-content-around">
+        <button class="btn btn-success" @onclick="() => ds.Close(true)">@ResViewCommon.PromptChoice_Ok</button>
+        <button class="btn btn-danger" @onclick="() => ds.Close(false)">@ResViewCommon.PromptChoice_Cancel</button>
+    </div>
+</div>);
+if (result is not null && result.Value)
+{
+this.OnDeleteRequested(this.DataPoint);
+}
+}
+}

@@ -1,0 +1,63 @@
+﻿@page "/ViewDataForProject/{id}"
+@inject HttpClient Http
+@using Newtonsoft.Json
+
+
+<PageTitle>Physikalische Ansicht</PageTitle>
+<div class="row">
+    @if(LstMeasurements != null)
+    {
+        foreach(var measurement in LstMeasurementValues)
+        {
+            <div class="col-md-12 col-sm-12 col-lg-6 p-2">
+
+             <RadzenCard  class="mt-2">
+                    <div>
+                        <RadzenIcon Icon="lightbulb"></RadzenIcon>
+                        <h3 class="mb-0"><span class="badge bg-primary text-white">@LstMeasurements.FirstOrDefault(a => a.Id == measurement.MeasurementId).Name</span></h3>
+                        <p><span class="badge bg-secondary text-white">Messwert</span></p>
+                        <br>
+                        <p>Aktuellster Messwert <strong>@measurement.Value</strong></p>
+                        <p>Messung wurde zur folgenden Zeit durchgeführt <strong>@measurement.TimeStamp</strong></p>
+                        <p>Der Messwert wurde an folgender GPS Position ermittelt <strong>Lat: @(measurement.Latitude), Long: @(measurement.Longitude), Alt: @(measurement.Altitude)</strong></p>
+                    </div>
+             </RadzenCard>
+             </div>
+        }
+    }
+    
+        
+    
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    public List<MeasurementValue> LstMeasurementValues { get; set; }
+
+    public Project project { get; set; }
+    public List<Measurement> LstMeasurements { get; set; }
+
+    IEnumerable<Project> projects;
+    string baseUrl = "https://localhost:5003/";
+
+    object selection;
+    MeasurementValue measurement = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Client c = new Client(baseUrl, Http);
+        LstMeasurementValues = (await c.LatestValuesAsync(long.Parse(Id))).ToList();
+        project = (await c.ProjectsAll2Async(long.Parse(Id))).FirstOrDefault();
+        LstMeasurements = project.Gateways.SelectMany(a => a.Sensors).SelectMany(a => a.Interfaces).SelectMany(a => a.Chips).SelectMany(a => a.Measurements).ToList();
+
+        await base.OnParametersSetAsync();
+    }
+
+}

@@ -1,0 +1,465 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+
+	  <!-- Package Infos -->
+    <Product>Exchange</Product>
+    <Description>Daten für Austausch zwischen App und Webserver</Description>
+    <Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+    <Copyright>(C) 2009-2021 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+    <Authors>BISS</Authors>
+    <NeutralLanguage>de</NeutralLanguage>
+
+    <!-- Pflicht! -->
+    <Nullable>Enable</Nullable>
+
+    <!-- Analyzers Einstellungen -->
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+
+    <!-- Build Einstellungen -->
+    <SignAssembly>false</SignAssembly>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!-- NoWarn für Missmatch bei .NetStandard 2.1 und .Netcore 3.1 -->
+    <NoWarn>NU1201,NU1202</NoWarn>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="PostRequests\**" />
+    <EmbeddedResource Remove="PostRequests\**" />
+    <None Remove="PostRequests\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Biss" Version="5.1.5" />
+    <PackageReference Include="Biss.Apps" Version="7.2.0" />
+    <PackageReference Include="BISS.Apps.Connectivity" Version="7.1.2" />
+    <PackageReference Include="Biss.Apps.Push" Version="7.1.0" />
+    <PackageReference Include="MQTTnet" Version="3.0.16" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" PrivateAssets="All" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Json" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Annotations\ConfigurationTool\" />
+    <Folder Include="Helper\" />
+    <Folder Include="Resources\Fonts\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\appbarcard1.png" />
+    <None Remove="Resources\Images\appbarcard2.png" />
+    <None Remove="Resources\Images\appbarcard3.png" />
+    <None Remove="Resources\Images\BissBackground.png" />
+    <None Remove="Resources\Images\ClusteredPin.png" />
+    <None Remove="Resources\Images\DefaultUserImage.png" />
+    <None Remove="Resources\Images\fotecVert.png" />
+    <None Remove="Resources\Images\Logo.png" />
+    <None Remove="Resources\Images\Logo2.png" />
+    <None Remove="Resources\Images\Logo3.png" />
+    <None Remove="Resources\Images\MsTeams.png" />
+    <None Remove="Resources\Images\MsTodo.png" />
+    <None Remove="Resources\Images\NerdLogo.png" />
+    <None Remove="Resources\Images\NerdLogoBorder.png" />
+    <None Remove="Resources\Images\NerdLogoExtended.png" />
+    <None Remove="Resources\Images\Pin.png" />
+    <None Remove="Resources\Images\SplashScreenHorizontal.png" />
+    <None Remove="Resources\Images\SplashScreenVertical.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\ClusteredPin.png" />
+    <EmbeddedResource Include="Resources\Images\fotecVert.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\BissBackground.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\appbarcard1.png" />
+    <EmbeddedResource Include="Resources\Images\appbarcard2.png" />
+    <EmbeddedResource Include="Resources\Images\appbarcard3.png" />
+    <EmbeddedResource Include="Resources\Images\DefaultUserImage.png" />
+    <EmbeddedResource Include="Resources\Images\Logo.png" />
+    <EmbeddedResource Include="Resources\Images\Logo2.png" />
+    <EmbeddedResource Include="Resources\Images\Logo3.png" />
+    <EmbeddedResource Include="Resources\Images\MsTeams.png" />
+    <EmbeddedResource Include="Resources\Images\MsTodo.png" />
+    <EmbeddedResource Include="Resources\Images\NerdLogo.png" />
+    <EmbeddedResource Include="Resources\Images\NerdLogoBorder.png" />
+    <EmbeddedResource Include="Resources\Images\NerdLogoExtended.png" />
+    <EmbeddedResource Include="Resources\Images\Pin.png" />
+    <EmbeddedResource Include="Resources\Images\SplashScreenVertical.png" />
+    <EmbeddedResource Include="Resources\Images\SplashScreenHorizontal.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExConfigExchange\ExConfigExchange.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ExchangeLibrary">
+      <HintPath>..\..\DataskopOriginal\Dataskop-Core\ExchangeLibrary\bin\Debug\netstandard2.1\publish\ExchangeLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ResAdminApps\ResViewAdmin.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdmin.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminAccountSettings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminAccountSettings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminDeviceDetails.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminDeviceDetails.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminDevicesOverview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminDevicesOverview.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminLogin.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminLogin.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminMain.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminMain.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResControls.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResControls.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResView.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResView.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminEditFirstAid.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminEditFirstAid.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminEditInfoText.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminEditInfoText.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminFirstAidOverview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminFirstAidOverview.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminInfoTextsOverview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminInfoTextsOverview.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewDemo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewDemo.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminExportData.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminExportData.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewEditDay.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewEditDay.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewEditToDo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewEditToDo.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewEditToDoFromCall.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewEditToDoFromCall.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewFirstAid.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewFirstAid.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewFirstAidOverview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewFirstAidOverview.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewFirstLogin.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewFirstLogin.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewFooterNavigation.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewFooterNavigation.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewHistory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewHistory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewInfo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewInfo.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewInfoTexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewInfoTexts.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewLogin.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewLogin.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewMain.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewMain.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminMaintenance.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminMaintenance.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewMe.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewMe.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewMenu.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResAdminApps\ResViewAdminSurveyLinks.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewAdminSurveyLinks.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewSettings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewSettings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewSettingsMicrosoftToDo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewSettingsMicrosoftToDo.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewSettingsPush.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewSettingsPush.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewSettingsWorkTime.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewSettingsWorkTime.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewStatistics.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewStatistics.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResViewToDo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResViewToDo.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ResWebCommon.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResWebCommon.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdmin.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdmin.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminAccountSettings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminAccountSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminDeviceDetails.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminDeviceDetails.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminDevicesOverview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminDevicesOverview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminLogin.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminLogin.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminMain.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminMain.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResConfigurationTool\ResViewConfigurationTool.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResControls.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResControls.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminEditFirstAid.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminEditFirstAid.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminEditInfoText.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminEditInfoText.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminFirstAidOverview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminFirstAidOverview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminInfoTextsOverview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminInfoTextsOverview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminExportData.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminExportData.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewEditDay.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewEditDay.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewEditToDo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewEditToDo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewEditToDoFromCall.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewEditToDoFromCall.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewFirstAid.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewFirstAid.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewFirstAidOverview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewFirstAidOverview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewFirstLogin.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewFirstLogin.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewFooterNavigation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewFooterNavigation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewHistory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewHistory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewInfo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewInfo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewInfoTexts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewInfoTexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewLogin.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewLogin.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewMain.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewMain.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminMaintenance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminMaintenance.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewMe.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewMe.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewMenu.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewMenu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResAdminApps\ResViewAdminSurveyLinks.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewAdminSurveyLinks.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewSettings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewSettingsMicrosoftToDo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewSettingsMicrosoftToDo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewSettingsPush.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewSettingsPush.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewSettingsWorkTime.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewSettingsWorkTime.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewStatistics.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewStatistics.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResViewToDo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResViewToDo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ResWebCommon.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResWebCommon.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

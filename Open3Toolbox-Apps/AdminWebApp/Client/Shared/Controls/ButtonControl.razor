@@ -1,0 +1,10 @@
+﻿@using Biss.Apps.ViewModel
+<button class="btn btn-primary" type="button"
+        @onclick="@Item.Execute"
+        disabled="@Item.Disabled">
+    @Item.DisplayName
+</button>
+
+@code {
+    [Parameter] public VmCommand Item { get; set; }
+}

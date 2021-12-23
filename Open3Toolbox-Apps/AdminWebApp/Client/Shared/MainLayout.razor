@@ -1,0 +1,118 @@
+﻿@using BaseApp
+@using AdminWebApp.Client.Shared.NavMenu
+@using Microsoft.AspNetCore.Components
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@inherits Microsoft.AspNetCore.Components.LayoutComponentBase
+@inject ITelerikStringLocalizer L
+@*Radzen Dialog*@
+<RadzenDialog />
+<RadzenNotification />
+
+<TelerikRootComponent>
+    <div class="header">
+        <div class="nav-container">
+            <div class="menu-button">
+                <TelerikButton Icon="@IconName.Menu" OnClick="ToggleMenuDrawer" />
+            </div>
+            <div class="title">
+                <img src="/content/Loewe_weiß.png" style="height: 60px;margin-right: 20px" />
+                <h1>Open³Toolbox - Konfigurationstool</h1>
+            </div>
+
+            <div class="settings">
+                <TelerikButton Icon="@IconName.Information" OnClick="@(() => SettingsExpanded = !SettingsExpanded)" />
+            </div>
+        </div>
+    </div>
+    <TelerikDrawer @ref="MenuDrawer"
+                   Expanded="@Expanded"
+                   ExpandedChanged="((bool newValue) => ExpandedChangedHandler(newValue))"
+                   Width="280px" TItem="DrawerItem" Mode="DrawerMode.Push" Position="DrawerPosition.Left" MiniMode="true">
+        <Template>
+            <DrawTemplate></DrawTemplate>
+        </Template>
+        <Content>
+            @Body
+        </Content>
+    </TelerikDrawer>
+    <TelerikWindow @bind-Visible="SettingsExpanded" Modal="true">
+        <WindowTitle>
+            Informationen zur Anwendung
+        </WindowTitle>
+        <WindowActions>
+            <WindowAction Name="Close" />
+        </WindowActions>
+        <WindowContent>
+            <div class="k-widget k-form">
+                <p>Version: @Exchange.AppSettings.Current().AppVersion</p>
+                <p>System: @InfoCurrentMode</p>
+            </div>
+        </WindowContent>
+    </TelerikWindow>
+    <TelerikWindow @bind-Visible="DocsExpanded" Modal="true" Width="70vw">
+        <WindowTitle>
+            ABC
+        </WindowTitle>
+        <WindowActions>
+            <WindowAction Name="Close" />
+        </WindowActions>
+        <WindowContent>
+            <div class="docs-wrapper">
+                @((MarkupString)Docs)
+            </div>
+        </WindowContent>
+    </TelerikWindow>
+</TelerikRootComponent>
+
+@code {
+
+    TelerikDrawer<DrawerItem> MenuDrawer { get; set; }
+
+    bool Expanded { get; set; }
+    bool SettingsExpanded { get; set; }
+    bool DocsExpanded { get; set; }
+    string Docs { get; set; }
+    string InfoCurrentMode { get; set; }
+
+
+    async Task ToggleMenuDrawer()
+    {
+        if (Expanded)
+        {
+            await MenuDrawer.CollapseAsync();
+        }
+        else
+        {
+            await MenuDrawer.ExpandAsync();
+        }
+    }
+
+
+    async Task ExpandedChangedHandler(bool value)
+    {
+        Expanded = value;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Expanded = true;
+
+        switch (Exchange.AppSettings.Current().AppConfigurationConstants)
+        {
+            case 0:
+                InfoCurrentMode = "Release";
+                break;
+            case 1:
+                InfoCurrentMode = "Beta";
+                break;
+            case 2:
+                InfoCurrentMode = "Developer";
+                break;
+            default:
+                InfoCurrentMode = "Developer (Unbekannter Zweig)";
+                break;
+        }
+    }
+
+}

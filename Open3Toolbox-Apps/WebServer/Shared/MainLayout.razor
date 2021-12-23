@@ -1,0 +1,122 @@
+﻿@inherits LayoutComponentBase
+@using Exchange;
+@using WebServer.Resources
+
+<TelerikRootComponent>
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="border-bottom border-black bg-light px-5" >
+            <table width="100%">
+                <td align="left">
+                    <a href="https://www.fotec.at" target="_blank"><img src="Content/fotec.png" width="120" height="50" class="left" /></a>
+                </td>
+                <td align="right">
+                    <table class="versiontable" align="right">
+                        <tr>
+                            <td>
+                                @ResViewTopNavBar.VersionString
+                            </td>
+                            <td>
+                                @webserverversion
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @ResViewTopNavBar.ModusString
+                            </td>
+                            <td>
+                                @modestring
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+            <style>
+                .left {
+                    display: block;
+                    margin-left: 0px;
+                    margin-right: initial;
+                }
+            </style>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</TelerikRootComponent>
+
+@if (mode > 1)
+{
+    <style>
+        .versiontable {
+            border: 10px;
+            background: rgb(255,0,0);
+            background: linear-gradient(311deg, rgba(255,0,0,1) 0%, rgba(172,0,0,1) 61%, rgba(255,0,0,1) 100%);
+            color : white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+}
+@if (mode == 1)
+{
+    <style>
+        .versiontable {
+            border: 10px;
+            border-color: black;
+            background: rgb(255,184,0);
+            background: linear-gradient(311deg, rgba(255,184,0,1) 0%, rgba(255,218,0,1) 61%, rgba(255,124,0,1) 100%);
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+}
+@if (mode == 0)
+{
+    <style>
+        .versiontable {
+            border: 10px;
+            border-color: black;
+            background: rgb(110,110,110);
+            background: linear-gradient(311deg, rgba(110,110,110,1) 0%, rgba(215,215,215,1) 61%, rgba(93,93,93,1) 100%);
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+}
+@code{
+    public string webserverversion { get; set; }
+    public string modestring { get; set; }
+    public int mode { get; set; }
+
+    /// <summary>
+    /// Initialisierungmethode
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+
+        AppSettings settings = AppSettings.Current();
+        webserverversion = settings.AppVersion;
+        mode = settings.AppConfigurationConstants;
+        switch (mode)
+        {
+            case 0:
+                modestring = ResViewTopNavBar.ReleaseMode;
+                break;
+            case 1:
+                modestring = ResViewTopNavBar.TestMode;
+                break;
+            case 2:
+                modestring = ResViewTopNavBar.DevMode;
+                break;
+            default:
+                modestring = string.Empty;
+                break;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="BaseApp.Controls.PercentControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="PercentControlBase">
+    <ContentView.Content>
+        <Grid BindingContext="{x:Reference PercentControlBase}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="{Binding MinValueUi, StringFormat='{0:p0}'}" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="2"
+                Text="{Binding Value, StringFormat='{0:p2}'}" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="4"
+                Text="{Binding MaxValueUi, StringFormat='{0:p0}'}" />
+
+            <Grid
+                x:Name="LineGrid"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="5"
+                ColumnSpacing="0" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

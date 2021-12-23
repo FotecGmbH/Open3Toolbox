@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{847546c2-d067-46c2-9c99-2bd55dd0f2d6}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\aes\lmic.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\aes\other.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\aes\ideetron\AES-128_V10.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4420.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4551.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4610.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4611.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4612.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4617.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4618.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4630.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4801.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_catena4802.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_disco_l072cs_lrwan1.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_feather32u4lora.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_featherm0lora.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_heltec_lora32.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_thisboard.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\getpinmap_ttgo_lora32_v1.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\hal\hal.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_as923.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_au915.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_channelshuffle.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_compliance.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_eu868.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_eu_like.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_in866.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_kr920.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_us915.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_us_like.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\lmic_util.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\oslmic.c" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lmic\radio.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\arduino_lmic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\arduino_lmic_hal_boards.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\arduino_lmic_hal_configuration.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\arduino_lmic_lorawan_compliance.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\arduino_lmic_user_configuration.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\hal\hal.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\config.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\hal.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_as923.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_au915.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_eu868.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_in866.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_kr920.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_bandplan_us915.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_compat.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_compliance.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_config_preconditions.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_env.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_eu_like.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_us_like.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lmic_util.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_as923.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_au915.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_eu868.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_in866.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_kr920.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorabase_us915.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\lorawan_spec_compliance.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\oslmic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\lmic\oslmic_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)HOWTO-ADD-REGION.md" />
+<None Include="$(MSBuildThisFileDirectory)LICENSE" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+﻿@using BaseApp.ViewModel.Statistics
+
+<nav class="@this.Class">
+    <ol class="breadcrumb">
+        @foreach (var crumb in VmBreadCrumbs.BreadCrumbs.Reverse())
+        {
+            <li class="breadcrumb-item">
+                <strong>@crumb.Name</strong>
+            </li>
+        }
+    </ol>
+</nav>
+
+@code {
+    [Parameter]
+    public string Class { get; set; }
+}

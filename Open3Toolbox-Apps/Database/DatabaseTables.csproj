@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssetTargetFallback>portable-net451+win10+netcoreapp31+monoandroid11.0+xamarinios10</AssetTargetFallback>
+    
+    <!-- Package Infos -->
+    <Product>Database</Product>
+    <Description>Datenbankklassen</Description>
+    <Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+    <Copyright>(C) 2009-2020 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+    <Authors>BISS</Authors>
+    <NeutralLanguage>de</NeutralLanguage>
+
+    <!-- Pflicht! -->
+    <Nullable>Enable</Nullable>
+
+    <!-- Analyzers Einstellungen -->
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+
+    <!-- Build Einstellungen -->
+    <SignAssembly>false</SignAssembly>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!-- NoWarn für Missmatch bei .NetStandard 2.1 und .Netcore 3.1 -->
+    <NoWarn>NU1201,NU1202</NoWarn>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+	  <PackageReference Include="Biss" Version="5.1.9" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Exchange\Exchange.csproj" />
+    <ProjectReference Include="..\WebExchange\WebExchange.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

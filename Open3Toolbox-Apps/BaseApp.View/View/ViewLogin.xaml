@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewLogin"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:me="clr-namespace:BaseApp.MarkupExtensions"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel.UserApps;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmLogin.DesignInstance}"
+    x:TypeArguments="viewmodels:VmLogin"
+    ControlTemplate="{StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+        </Grid.RowDefinitions>
+
+        <!--#region Image-->
+        <BoxView
+            x:Name="Box"
+            Grid.Row="1"
+            Margin="10,0"
+            BackgroundColor="Transparent" />
+        <Image
+            Grid.Row="1"
+            Aspect="AspectFit"
+            HeightRequest="{Binding Source={x:Reference Box}, Path=Height}"
+            HorizontalOptions="Center"
+            Source="{Binding Converter={x:StaticResource ConverterUrlToImageSource}}"
+            VerticalOptions="Center"
+            WidthRequest="{Binding Source={x:Reference Box}, Path=Width}" />
+        <!--#endregion-->
+
+
+        <Label
+            Grid.Row="0"
+            Margin="0,10,0,0"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            Style="{StaticResource PageTitleStyle}"
+            Text="{me:Translate ResViewInfo.SubTitle}" />
+
+        <Label
+            Grid.Row="3"
+            Margin="5,10"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            Text="{me:Translate ResViewLogin.LoginInfoText}" />
+
+        <Grid
+            Grid.Row="4"
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding IsLoginButtonVisible}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Padding="5"
+                FontFamily="{StaticResource StreamLineIcons}"
+                FontSize="17"
+                Text="{Binding CmdAgb.DisplayName}"
+                TextColor="{StaticResource AccentColor}"
+                TextDecorations="Underline"
+                VerticalOptions="CenterAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CmdAgb}" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Switch
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalOptions="Center"
+                IsToggled="{Binding AgbAccepted}"
+                VerticalOptions="Center" />
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                Text="{me:Translate ResViewFirstLogin.LblAgbAccepted}"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <Button
+            Grid.Row="5"
+            Margin="5"
+            Command="{Binding CmdLogin}"
+            IsVisible="{Binding IsLoginButtonVisible}"
+            Text="{Binding CmdLogin.DisplayName}" />
+
+        <Label
+            Grid.Row="5"
+            Margin="5"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            IsVisible="{Binding NotIsLoginButtonVisible}"
+            Text="{me:Translate ResViewLogin.TryToLogin}" />
+
+        <Label
+            Grid.Row="6"
+            Margin="5"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            MaxLines="4"
+            Text="{Binding ErrorText}"
+            TextColor="{StaticResource ErrorColor}" />
+    </Grid>
+</view:BissContentPage>

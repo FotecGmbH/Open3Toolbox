@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentView
+    x:Class="BaseApp.Controls.FirstLoginItem"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:xf="clr-namespace:Biss.Apps.Converter;assembly=Biss.Apps.XF"
+    x:Name="FirstLoginItemBase">
+
+    <ContentView.Resources>
+        <xf:BooleanValueConverter
+            x:Key="DoneColorConverter"
+            FalseValue="Transparent"
+            TrueValue="PaleGreen" />
+    </ContentView.Resources>
+
+
+    <Grid
+        Margin="0"
+        BindingContext="{x:Reference FirstLoginItemBase}"
+        ColumnSpacing="0"
+        HorizontalOptions="Fill"
+        RowSpacing="0"
+        VerticalOptions="Fill">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+
+        <BoxView
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            BackgroundColor="{Binding IsDone, Converter={StaticResource DoneColorConverter}}" />
+
+        <Label
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Margin="5,0,10,0"
+            FontFamily="{x:StaticResource StreamLineIcons}"
+            FontSize="30"
+            HorizontalOptions="Center"
+            IsVisible="{Binding IsDone}"
+            Text="&#xe918;"
+            TextColor="{StaticResource AccentColor}"
+            VerticalOptions="Center" />
+
+        <!--  Invisible Placeholder  -->
+        <Label
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Margin="5,0,10,0"
+            BackgroundColor="Transparent"
+            FontFamily="{x:StaticResource StreamLineIcons}"
+            FontSize="30"
+            HorizontalOptions="Center"
+            IsVisible="{Binding IsDone, Converter={StaticResource InvertedBooleanConverter}}"
+            Text="&#xe918;"
+            TextColor="Transparent"
+            VerticalOptions="Center" />
+
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,-15,0,0"
+            FontSize="Large"
+            HorizontalOptions="Start"
+            Text="{Binding TitleText}" />
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            LineBreakMode="WordWrap"
+            Text="{Binding ContentText}" />
+
+        <BoxView
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            BackgroundColor="{StaticResource MainColor}"
+            HeightRequest="1" />
+    </Grid>
+
+</ContentView>

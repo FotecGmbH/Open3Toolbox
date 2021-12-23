@@ -1,0 +1,376 @@
+﻿@page "/databasedevicesstatistics"
+@*@attribute [Authorize]*@
+
+@inject LoginModel User
+@inject NavigationManager NavigationManager
+
+@using Database.Context;
+@using Database.Tables;
+@using Exchange;
+@using Biss.Common;
+@using WebServer.Models
+@using WebServer.Resources
+@using WebExchange 
+
+<h1>@ResViewDatabaseDeviceStatistics.Header</h1>
+<div class="container mw-100 mh-100">
+    <div class="row align-items-center">
+        @if (Osdonutdata.Count() > 0)
+        {
+            <div class="col-sm mw-100 mh-100" style="overflow:visible;">
+                <TelerikChart>
+                    <ChartTitle Text="@ResViewDatabaseDeviceStatistics.Chart_Os_Percentages" />
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Donut" Data="@Osdonutdata" Field="@nameof(OsData.Value)" CategoryField="@nameof(OsData.Platform)" Style="@ChartSeriesStyle.Smooth">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.OutsideEnd"
+                                               Visible="true"
+                                               Background="transparent"
+                                               Template="#= dataItem.platform # - #= round(percentage*100, 2) #%"></ChartSeriesLabels>
+                            <ChartSeriesMarkers Visible="false" />
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartLegend Visible="true" Position="ChartLegendPosition.Bottom"></ChartLegend>
+                </TelerikChart>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm">
+                <img src="@this.dummyImageSource" class="rounded-circle" />
+            </div>
+        }
+        @if (AppVersionData.Count() > 0)
+        {
+            <div class="col-sm mw-100 mh-100" style="overflow:visible;">
+                <TelerikChart>
+                    <ChartTitle Text="@ResViewDatabaseDeviceStatistics.Chart_App_Versions" />
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Donut" Data="@AppVersionData" Field="@nameof(AppVersion.Amount)" CategoryField="@nameof(AppVersion.Appversion)">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.OutsideEnd"
+                                               Visible="true"
+                                               Background="transparent"
+                                               Template="#= dataItem.appversion # - #= round(percentage*100, 2) #%"></ChartSeriesLabels>
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartLegend Visible="true" Position="ChartLegendPosition.Bottom"></ChartLegend>
+                </TelerikChart>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm">
+                <img src="@this.dummyImageSource" class="rounded-circle" />
+            </div>
+        }
+    </div>
+    <div class="row align-items-center">
+        @if (AndroidVersions.Count() > 0)
+        {
+            <div class="col-sm mw-100 mh-100" style="overflow:visible;">
+                <TelerikChart>
+                    <ChartTitle Text="@ResViewDatabaseDeviceStatistics.Chart_Android_Os_Versions" />
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Donut" Data="@AndroidVersions" Field="@nameof(AndroidVersion.Amount)" CategoryField="@nameof(AndroidVersion.Version)">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.OutsideEnd"
+                                               Visible="true"
+                                               Background="transparent"
+                                               Template="#= dataItem.version # - #= round(percentage*100, 2) #%"></ChartSeriesLabels>
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartLegend Visible="true" Position="ChartLegendPosition.Bottom"></ChartLegend>
+                </TelerikChart>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm">
+                <img src="@this.dummyImageSource" class="rounded-circle" />
+            </div>
+        }
+        @if (IosVersions.Count() > 0)
+        {
+            <div class="col-sm mw-100 mh-100" style="overflow:visible;">
+                <TelerikChart>
+                    <ChartTitle Text="@ResViewDatabaseDeviceStatistics.Chart_Ios_Os_Versions" />
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Donut" Data="@IosVersions" Field="@nameof(IosVersion.Amount)" CategoryField="@nameof(IosVersion.Version)">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.OutsideEnd"
+                                               Visible="true"
+                                               Background="transparent"
+                                               Template="#= dataItem.version # - #= round(percentage*100, 2) #%"></ChartSeriesLabels>
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartLegend Visible="true" Position="ChartLegendPosition.Bottom"></ChartLegend>
+                </TelerikChart>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm">
+                <img src="@this.dummyImageSource" class="rounded-circle" />
+            </div>
+        }
+    </div>
+    <div class="row align-items-center">
+        @if (Oldversiondata.Count() > 0)
+        {
+            <div class="col-sm mw-100 mh-100" style="overflow:visible;">
+                <TelerikChart>
+                    <ChartTitle Text="@ResViewDatabaseDeviceStatistics.Chart_Os_Actuality" />
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Donut" Data="@Oldversiondata" Field="@nameof(OldVersionUser.Amount)" CategoryField="@nameof(OldVersionUser.Name)">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.OutsideEnd"
+                                               Visible="true"
+                                               Background="transparent"
+                                               Template="#= dataItem.name # - #= round(percentage*100, 2) #%"></ChartSeriesLabels>
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartLegend Visible="true" Position="ChartLegendPosition.Bottom"></ChartLegend>
+                </TelerikChart>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm">
+                <img src="@this.dummyImageSource" class="rounded-circle" />
+            </div>
+        }
+    </div>
+</div>
+
+
+
+@code{
+    private string dummyImageSource = "https://dummyimage.com/600x400/a6a6a6/ffffff.png&text=NDA";
+
+    public string CurrentVersion { get; set; }
+    public string InfoVersion { get; set; }
+    public string MinVersion { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (!User.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return Task.CompletedTask;
+        }
+
+        base.OnInitializedAsync();
+
+        try
+        {
+            GetAndroidVersionChartData();
+            GetOldVersionChartData();
+            GetIosVersionChartData();
+            GetOsDonutData();
+            GetUserDonutData();
+
+            using (var db = new DatabaseContext(WebConstants.ConnectionString))
+            {
+                CurrentVersion = AppSettings.Current().AppVersion;
+                InfoVersion = db.TblSettings.FirstOrDefault()?.AppVersionInfo;
+                MinVersion = db.TblSettings.FirstOrDefault()?.AppVersionError;
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Log.LogError($"{e}");
+        }
+
+        return Task.CompletedTask;
+    }
+    #region OS Data Chart
+    public class OsData
+    {
+        public string Platform { get; set; }
+        public int Value { get; set; }
+    }
+
+    public List<OsData> Osdonutdata { get; set; } = new List<OsData>();
+
+    public void GetOsDonutData()
+    {
+        List<TableDevice> devices;
+        using (var db = new DatabaseContext(WebConstants.ConnectionString))
+        {
+            devices = db.TblDevices.ToList();
+        }
+
+        foreach (EnumPlattform plattform in (EnumPlattform[])Enum.GetValues(typeof(EnumPlattform)))
+        {
+            string name = plattform.ToString();
+            Osdonutdata.Add(new OsData() { Platform = name, Value = 0 });
+        }
+
+        foreach (var device in devices)
+        {
+            foreach (var osdata in Osdonutdata)
+            {
+                if (device.Plattform.ToString() == osdata.Platform)
+                {
+                    osdata.Value++;
+                }
+            }
+        }
+
+        Osdonutdata.RemoveAll(t => t.Value == 0);
+
+    }
+    #endregion
+    #region app version chart
+    public List<AppVersion> AppVersionData { get; set; } = new List<AppVersion>();
+
+    public class AppVersion
+    {
+        public string Appversion { get; set; }
+        public int Amount { get; set; }
+    }
+
+    public void GetUserDonutData()
+    {
+        List<TableDevice> devices;
+        using (var db = new DatabaseContext(WebConstants.ConnectionString))
+        {
+            devices = db.TblDevices.ToList();
+
+            foreach (var device in devices)
+            {
+                if (!AppVersionData.Any(t => t.Appversion == device.AppVersion))
+                {
+                    AppVersionData.Add(new AppVersion() { Amount = 1, Appversion = device.AppVersion });
+                }
+                else
+                {
+                    AppVersionData.Where(t => t.Appversion == device.AppVersion).FirstOrDefault().Amount++;
+                }
+            }
+        }
+    }
+    #endregion
+    #region Android Version Chart
+    public class AndroidVersion
+    {
+        public string Version { get; set; }
+        public int Amount { get; set; }
+    }
+
+    public List<AndroidVersion> AndroidVersions { get; set; } = new List<AndroidVersion>();
+
+    public void GetAndroidVersionChartData()
+    {
+        List<TableDevice> devices;
+        using (var db = new DatabaseContext(WebConstants.ConnectionString))
+        {
+            devices = db.TblDevices.ToList();
+        }
+        foreach (var device in devices)
+        {
+            if (device.Plattform == EnumPlattform.XamarinAndroid)
+            {
+                if (!AndroidVersions.Any(t => t.Version == "Android" + " " + device.OperatingSystemVersion))
+                {
+                    AndroidVersions.Add(new AndroidVersion() { Amount = 1, Version = "Android" + " " + device.OperatingSystemVersion });
+                }
+                else
+                {
+                    AndroidVersions.Where(t => t.Version == "Android" + " " + device.OperatingSystemVersion).FirstOrDefault().Amount++;
+                }
+            }
+        }
+    }
+    #endregion
+    #region IOS Version Chart
+    public class IosVersion
+    {
+        public string Version { get; set; }
+        public int Amount { get; set; }
+    }
+
+    public List<IosVersion> IosVersions { get; set; } = new List<IosVersion>();
+
+    public void GetIosVersionChartData()
+    {
+        List<TableDevice> devices;
+        using (var db = new DatabaseContext(WebConstants.ConnectionString))
+        {
+            devices = db.TblDevices.ToList();
+        }
+        foreach (var device in devices)
+        {
+            if (device.Plattform == EnumPlattform.XamarinIos)
+            {
+                if (!IosVersions.Any(t => t.Version == "IOS" + " " + device.OperatingSystemVersion))
+                {
+                    IosVersions.Add(new IosVersion() { Amount = 1, Version = "IOS" + " " + device.OperatingSystemVersion });
+                }
+                else
+                {
+                    IosVersions.Where(t => t.Version == "IOS" + " " + device.OperatingSystemVersion).FirstOrDefault().Amount++;
+                }
+            }
+        }
+    }
+    #endregion
+    #region Old Version Chart
+
+    public class OldVersionUser
+    {
+        public string Name { get; set; }
+        public int Amount { get; set; }
+        public int Id { get; set; }
+    }
+
+    public List<OldVersionUser> Oldversiondata { get; set; } = new List<OldVersionUser>();
+
+    public void GetOldVersionChartData()
+    {
+        List<TableDevice> devices = new List<TableDevice>();
+        using (var db = new DatabaseContext(WebConstants.ConnectionString))
+        {
+            devices = db.TblDevices.ToList();
+        }
+        Oldversiondata.Add(new OldVersionUser() { Amount = 0, Name = ResViewDatabaseDeviceStatistics.Os_Actuality_Old_Version, Id = 1 });
+        Oldversiondata.Add(new OldVersionUser() { Amount = 0, Name = ResViewDatabaseDeviceStatistics.OS_Actuality_New_Version, Id = 2 });
+        Oldversiondata.Add(new OldVersionUser() { Amount = 0, Name = ResViewDatabaseDeviceStatistics.Os_Actuality_Version_Not_Found, Id = 3 });
+
+        foreach (var device in devices)
+        {
+            if (device.Plattform == EnumPlattform.XamarinAndroid)
+            {
+                if (device.AppVersion == CurrentVersion)
+                {
+                    Oldversiondata.Where(t => t.Id == 2).FirstOrDefault().Amount++;
+                    continue;
+                }
+                else
+                {
+                    Oldversiondata.Where(t => t.Id == 1).FirstOrDefault().Amount++;
+                    continue;
+                }
+            }
+            if (device.Plattform == EnumPlattform.XamarinIos)
+            {
+                if (device.AppVersion == CurrentVersion)
+                {
+                    Oldversiondata.Where(t => t.Id == 2).FirstOrDefault().Amount++;
+                }
+                else
+                {
+                    Oldversiondata.Where(t => t.Id == 1).FirstOrDefault().Amount++;
+                }
+            }
+            else
+            {
+                Oldversiondata.Where(t => t.Id == 3).FirstOrDefault().Amount++;
+            }
+        }
+        Oldversiondata.RemoveAll(t => t.Amount == 0);
+    }
+
+    #endregion
+}

@@ -1,0 +1,97 @@
+﻿.send {
+    background-image: none; 
+    background-color: lightgray;
+    color: black;
+    margin-top: 18px
+}
+
+.send:hover {
+    background-color: gray;
+}
+
+.androidText {
+    background-image: none;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+.androidBtn {
+    background-image: none;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.iosText {
+    background-image: none;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.iosBut {
+    background-image: none;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.share {
+    background-image: none;
+    background-color: lightgray;
+    color: black;
+    margin-bottom: 10px
+}
+
+.share:hover {
+    background-color: gray;
+}
+
+.w-45 {
+    width: 45%;
+}
+
+.lock {
+    background-image: none;
+    margin-bottom: 8px;
+    background-color: lightgray;
+    color: black;
+}
+
+.lock:hover {
+    background-image: none;
+    background-color: dimgray;
+    color: white;
+}
+
+.edit {
+    background-image: none;
+    background-color: dodgerblue;
+    color: white;
+}
+
+.edit:hover {
+    background-image: none;
+    background-color: royalblue;
+}
+
+.save {
+    background-image: none;
+    margin-bottom: 8px;
+    background-color: limegreen;
+    color: black;
+}
+
+.save:hover {
+    background-image: none;
+    background-color: green;
+    color: white;
+}
+
+.cancel {
+    background-image: none;
+    background-color: red;
+    color: black;
+}
+
+.cancel:hover {
+    background-image: none;
+    background-color: darkred;
+    color: white;
+}

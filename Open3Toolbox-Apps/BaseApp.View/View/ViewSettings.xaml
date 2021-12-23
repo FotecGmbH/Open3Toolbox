@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewSettings"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmSettings.DesignInstance}"
+    x:TypeArguments="viewmodels:VmSettings"
+    ControlTemplate="{StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    mc:Ignorable="d">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <!--#region Content-->
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+
+            <controls:SettingsButton Grid.Row="8" BissCommand="{Binding CmdCommonSettings}" />
+
+            <controls:SettingsButton Grid.Row="9" BissCommand="{Binding CmdGoToPlanWorkTimeSettings}" />
+
+            <controls:SettingsButton Grid.Row="10" BissCommand="{Binding CmdGoToPushMessageSettings}" />
+
+            <controls:SettingsButton
+                Grid.Row="11"
+                BissCommand="{Binding CmdGoToMsToDoSettings}"
+                ShowMsTeamsLogo="True" />
+
+            <Label
+                Grid.Row="1"
+                Style="{StaticResource PageTitleStyle}"
+                Text="{Binding PageTitle}" />
+
+        </Grid>
+
+        <!--#endregion-->
+
+        <controls:Header Grid.Row="0" />
+        <controls:Footer Grid.Row="2" />
+    </Grid>
+
+
+</view:BissContentPage>

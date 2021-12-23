@@ -1,0 +1,89 @@
+﻿@page "/ViewHistoricalData/{id}"
+@inject HttpClient Http
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<PageTitle>Historische Daten</PageTitle>
+<div class="row">
+    <div class="col-12">
+        @if(result != null)
+        {
+            <h3>Id @Id</h3>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-lg-6 p-2">
+        <RadzenCard  class="mt-2">
+           
+            <RadzenDataGrid AllowColumnResize="true" PageSizeOptions="@(new List<int>(){10,20, 50,100})" @ref="grid" IsLoading=@isLoading Count="@cnt" Data="@MeasurementValues" LoadData="@LoadData" AllowSorting="true" AllowFiltering="true" AllowPaging="true" TItem="MeasurementValue">
+                <Columns>
+                    <RadzenDataGridColumn TItem="MeasurementValue" Title="Wert" Property="Value" Sortable="false" />
+                    <RadzenDataGridColumn TItem="MeasurementValue" Property="TimeStamp" Title="Zeitstempel"/>
+                    <RadzenDataGridColumn TItem="MeasurementValue" Property="Latitude" Title="Latitude" Sortable="false"/>
+                    <RadzenDataGridColumn TItem="MeasurementValue" Property="Longitude" Title="Longitude" Sortable="false"/>
+                    <RadzenDataGridColumn TItem="MeasurementValue" Property="Altitude" Title="Altitude" Sortable="false"/>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenCard>
+    </div>
+        
+            @if(MeasurementValues != null)
+            {
+                <div class="col-md-12 col-sm-12 col-lg-6 p-2">
+                    <RadzenCard  class="mt-2">
+                    <RadzenChart>
+                        <RadzenLineSeries Smooth="true" Data="@MeasurementValues.ToArray()" Title="DATEN" CategoryProperty="TimeStamp" LineType="LineType.Dashed" ValueProperty="Value">
+                            <RadzenMarkers MarkerType="MarkerType.Circle" />
+                        </RadzenLineSeries>
+                            </RadzenChart>
+                    </RadzenCard>
+                </div>
+            }
+
+</div>
+
+    @code {
+        RadzenDataGrid<MeasurementValue> grid;
+
+        [Parameter]
+        public string? Id { get; set; }
+
+        public int PageSize = 10;
+
+        bool isLoading = true;
+        int cnt = 0;
+
+        public ICollection<MeasurementValue> MeasurementValues;
+
+        string baseUrl = "https://localhost:5003/";
+
+        ExUserLogicView userView = null;
+        MeasurementValueQueryExtendedResult result = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    async void LoadData(LoadDataArgs args)
+    {
+        int IdAsInt = int.Parse(Id);
+
+        isLoading = true;
+
+        Client c = new Client(baseUrl, Http);
+        result = await c.QueryextendedAsync(IdAsInt, args.Top.Value, args.Skip.Value, args.Filter, args.OrderBy);
+        MeasurementValues = result.MeasurementValues;
+        cnt = (int)result.Count;
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+}

@@ -1,0 +1,213 @@
+﻿@page "/ViewDataPhysics"
+@inject HttpClient Http
+@using Newtonsoft.Json
+
+<style type="text/css">
+    .left{
+        float:left;
+        margin-right:4px;
+    }
+</style>
+
+<PageTitle>Physikalische Ansicht</PageTitle>
+<div class="row">
+    <div class="col-6 p-2">
+        <RadzenCard class="mt-2">
+            <RadzenTree Data=@projects Change=@OnChange @bind-Value=@selection>
+                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Gateways" Template=@ProjectTemplate />
+                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Sensors" Template=@GatewayTemplate />
+                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Interfaces" Template=@SensorTemplate/>
+                <RadzenTreeLevel TextProperty="InterfaceType" Template=@InterfacesTemplate ChildrenProperty="AllMeasurements"/>
+                <RadzenTreeLevel TextProperty="Name" HasChildren=@(p => false) Template=@MeasurementTemplate/>
+            </RadzenTree>
+        </RadzenCard>
+    </div>
+    <div class="col-6 p-2">
+        <RadzenCard class="mt-2">
+            @if(selection == null)
+            {
+                <div>
+                    <h4>Wählen Sie ein Element aus.</h4>
+                </div>
+            }
+            else if(selection is Measurement m)
+            {
+                <div>
+                    <RadzenIcon Icon="description"></RadzenIcon>
+
+                    <h3 class="mb-0"><span class="badge bg-primary text-white">@m.Name</span></h3>
+                    <p><span class="badge bg-secondary text-white">Einstellungen</span></p>
+                    <br>
+                    <p>MesswertID <strong>@m.Id</strong></p>
+                    <p>Port <strong>@m.Port</strong></p>
+                    
+                </div>
+            }else if(selection is Gateway g)
+            {
+                <div>
+                    <RadzenIcon Icon="cloud"></RadzenIcon>
+
+                    <h3 class="mb-0"><span class="badge bg-primary text-white">@g.Name</span></h3>
+                    <p><span class="badge bg-secondary text-white">@g.Description</span></p>
+                    <br>
+                    <p>Übertragung alle <strong>@(g.Interval/1000)</strong> Sekunden</p>
+                    <p>Server-URL <strong>@g.ServerUrl</strong></p>
+                </div>
+            }else if(selection is Sensor s)
+            {
+                <div>
+                    <RadzenIcon Icon="devices"></RadzenIcon>
+                    <h3 class="mb-0"><span class="badge bg-primary text-white">@s.Name</span></h3>
+                    <p><span class="badge bg-secondary text-white">@s.Description</span></p>
+                    <br>
+                    <p>Messung alle <strong>@s.MeasureInterval</strong> Millisekunden</p>
+                    <p>Übertragung nach <strong>@s.MeasureXTimesTillSend</strong> Messvorgängen</p>
+                </div>
+            }else if(selection is Project p)
+            {
+                <div>
+                    <RadzenIcon Icon="folder"></RadzenIcon>
+                    <h3 class="mb-0"><span class="badge bg-primary text-white">@p.Name</span></h3>
+                    <p><span class="badge bg-secondary text-white">@p.Description</span></p>
+                    <br>
+                    <p>Projekt hat die ID <strong>@p.Id</strong></p>
+                </div>
+            }else if(selection is CommunicationInterface ci)
+            {
+                <div>
+                    @if (ci.InterfaceType.Contains("i2c"))
+                    {
+                        <RadzenIcon Icon="directions_bus"></RadzenIcon>    
+                    }else{
+                         <RadzenIcon Icon="settings_input_composite"></RadzenIcon>    
+                    }
+                    
+                    <h3 class="mb-0"><span class="badge bg-primary text-white">@ci.InterfaceType</span></h3>
+                </div>
+            }
+
+        </RadzenCard>
+       
+            @if(selection != null && selection is Measurement m && measurement != null)
+            {
+                 <RadzenCard  class="mt-2">
+                    <div>
+                        <RadzenIcon Icon="lightbulb"></RadzenIcon>
+                        <h3 class="mb-0"><span class="badge bg-primary text-white">@m.Name</span></h3>
+                        <p><span class="badge bg-secondary text-white">Messwert</span></p>
+                        <br>
+                        <p>Aktuellster Messwert <strong>@measurement.Value</strong></p>
+                        <p>Messung wurde zur folgenden Zeit durchgeführt <strong>@measurement.TimeStamp</strong></p>
+                        <p>Der Messwert wurde an folgender GPS Position ermittelt <strong>Lat: @(measurement.Latitude), Long: @(measurement.Longitude), Alt: @(measurement.Altitude)</strong></p>
+                    </div>
+                </RadzenCard>
+            }else if(selection != null && selection is Measurement && measurement == null)
+            {
+                <RadzenCard  class="mt-2">
+                <div>Es wurden noch keine Daten empfangen!</div>
+                </RadzenCard>
+            }
+        
+    </div>
+</div>
+
+@code {
+    
+
+    IEnumerable<Project> projects;
+    string baseUrl = "https://localhost:5003/";
+
+    object selection;
+    MeasurementValue measurement = null;
+
+    async void OnChange()
+    {
+        if(selection is Measurement)
+        {
+            Measurement sel = (Measurement)selection;
+            Client c = new Client(baseUrl, Http);
+            var latestValue = await c.QueryAsync(sel.Id, false, 1, 0);
+            measurement = latestValue.FirstOrDefault();
+            StateHasChanged();
+        }
+    }
+
+    static void renderTreeWithIcon(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, RadzenTreeItem context, string icon)
+    {
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(0, "class", "left");
+        builder.OpenComponent<RadzenIcon>(0);
+        builder.AddAttribute(0, nameof(RadzenIcon.Icon), icon);
+        builder.CloseComponent();
+        builder.CloseElement();
+        builder.OpenElement(0, "span");
+        builder.AddContent(1, context.Text);
+        builder.CloseElement();
+    }
+
+    RenderFragment<RadzenTreeItem> ProjectTemplate = (context) => builder =>
+    {
+        renderTreeWithIcon(builder, context, "folder");
+    };
+
+    RenderFragment<RadzenTreeItem> SensorTemplate = (context) => builder =>
+    {
+        renderTreeWithIcon(builder, context, "devices");
+    };
+
+    RenderFragment<RadzenTreeItem> GatewayTemplate = (context) => builder =>
+    {
+        renderTreeWithIcon(builder, context, "cloud");
+    };
+
+    RenderFragment<RadzenTreeItem> MeasurementTemplate = (context) => builder =>
+    {
+        renderTreeWithIcon(builder, context, "description");
+    };
+
+    RenderFragment<RadzenTreeItem> InterfacesTemplate = (context) => builder =>
+    {
+        if(context.Text.Equals("i2cInterface"))
+        {
+            renderTreeWithIcon(builder, context, "directions_bus");
+        }
+        else
+        {
+            renderTreeWithIcon(builder, context, "settings_input_composite");
+        }
+
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Client c = new Client(baseUrl, Http);
+        projects = await c.ProjectsAllAsync();
+        prepareProjects(projects);
+
+        await base.OnParametersSetAsync();
+    }
+
+    private void prepareProjects(IEnumerable<Project> projects)
+    {
+        foreach(Project p in projects)
+        {
+            foreach(Gateway g in p.Gateways)
+            {
+                foreach(Sensor s in g.Sensors)
+                {
+                    foreach(CommunicationInterface cf in s.Interfaces)
+                    {
+                        var allMeasurements = cf.Chips.SelectMany(a => a.Measurements).ToList();
+                        cf.AllMeasurements = allMeasurements.ToList();
+                    }
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="BaseApp.Styles.StyLayout"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:styles="clr-namespace:BaseApp.Styles;assembly=BaseApp.View">
+
+    <OnIdiom
+        x:Key="DefaultWidthSize"
+        x:TypeArguments="x:Double"
+        Default="600"
+        Desktop="600"
+        Phone="300"
+        TV="600"
+        Tablet="600"
+        Watch="100" />
+
+    <OnIdiom
+        x:Key="DefaultLayoutOptions"
+        x:TypeArguments="LayoutOptions"
+        Default="FillAndExpand"
+        Desktop="CenterAndExpand"
+        Phone="FillAndExpand"
+        TV="CenterAndExpand"
+        Tablet="CenterAndExpand"
+        Watch="FillAndExpand" />
+
+    <!--  Höhe der Menüzeile  -->
+    <OnPlatform x:Key="HeaderHeight" x:TypeArguments="GridLength">
+        <On Platform="iOS" Value="60" />
+        <On Platform="Android" Value="60" />
+        <On Platform="UWP, WinRT, WinPhone, WPF" Value="60" />
+        <On Platform="Default" Value="60" />
+    </OnPlatform>
+
+    <OnPlatform x:Key="BaseButtonBorderRadius" x:TypeArguments="x:Double">
+        <On Platform="Android" Value="0" />
+        <On Platform="iOS" Value="0" />
+        <On Platform="UWP, WinRT, WinPhone, WPF" Value="0" />
+        <On Platform="Default" Value="0" />
+    </OnPlatform>
+
+    <OnPlatform x:Key="BaseButtonBorderWidth" x:TypeArguments="x:Double">
+        <On Platform="Android" Value="0" />
+        <On Platform="iOS" Value="0" />
+        <On Platform="UWP, WinRT, WinPhone, WPF" Value="0" />
+        <On Platform="Default" Value="0" />
+    </OnPlatform>
+
+</ResourceDictionary>

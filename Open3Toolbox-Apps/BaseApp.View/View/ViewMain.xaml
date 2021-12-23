@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewMain"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    x:Name="MyViewMain"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmMain.DesignInstance}"
+    x:TypeArguments="viewmodels:VmMain"
+    ControlTemplate="{x:StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <controls:Header Grid.Row="0" />
+        <controls:Footer Grid.Row="2" />
+
+        <ScrollView Grid.Row="1">
+            <StackLayout Margin="10,0">
+
+                <!--#region Details zum Tag-->
+                <Grid Padding="0" RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="{Binding DayHeader}" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        Text="{Binding DaySubHeader}" />
+
+                </Grid>
+
+
+                <!--#endregion-->
+
+                <!--#region ToDos, Termine und Anrufe-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Info Header  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="{x:Static res:ResViewMain.Lbl_Infos}" />
+
+                </Grid>
+                <!--#endregion-->
+
+                <Button
+                    Command="{Binding CmdDontDisturb}"
+                    HorizontalOptions="Center"
+                    Text="{Binding CmdDontDisturb.DisplayName}" />
+
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</view:BissContentPage>

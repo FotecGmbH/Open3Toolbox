@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="BaseApp.Styles.StyExplicitProjectStyles"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:rad="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    xmlns:styles="clr-namespace:BaseApp.Styles;assembly=BaseApp.View">
+
+    <ResourceDictionary.MergedDictionaries>
+        <styles:StyColors />
+        <styles:StyFonts />
+        <styles:StyFontSizes />
+        <styles:StyLayout />
+        <styles:StyImplicitStyles />
+    </ResourceDictionary.MergedDictionaries>
+
+
+    <!--#region Borders-->
+    <Style x:Key="StyleHeaderBorder" TargetType="rad:RadBorder">
+        <Setter Property="CornerRadius" Value="50" />
+        <Setter Property="WidthRequest" Value="50" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="BorderColor" Value="Gray" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="StyleButtonBorder" TargetType="rad:RadBorder">
+        <Setter Property="CornerRadius" Value="40" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="BorderColor" Value="{StaticResource MainColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <!--#endregion-->
+
+</ResourceDictionary>

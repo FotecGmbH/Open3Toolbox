@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="BaseApp.Controls.SettingsButton"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:Biss.Apps.Converter;assembly=Biss.Apps.XF"
+    x:Name="SettingsButtonBase">
+
+
+    <ContentView.Resources>
+
+        <converter:BooleanValueConverter
+            x:Key="BackgroundColorConverter"
+            FalseValue="{StaticResource GrayColor}"
+            TrueValue="{StaticResource MainColor}" />
+    </ContentView.Resources>
+
+    <ContentView.Content>
+
+
+        <Grid
+            Margin="10,0"
+            BindingContext="{x:Reference SettingsButtonBase}"
+            ColumnSpacing="0"
+            RowSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="1" />
+            </Grid.RowDefinitions>
+
+            <BoxView
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                BackgroundColor="{Binding BissCommand.IsSelected, Converter={StaticResource BackgroundColorConverter}}" />
+
+            <Image
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Margin="10,0,20,0"
+                Aspect="AspectFit"
+                IsVisible="{Binding ShowMsTeamsLogo}"
+                Source="{Binding Converter={x:StaticResource ConverterUrlToImageSource}, ConverterParameter=mstodo}"
+                WidthRequest="40" />
+
+            <Label
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Margin="10,0,20,0"
+                FontFamily="{x:StaticResource StreamLineIcons}"
+                FontSize="40"
+                HorizontalOptions="Center"
+                IsVisible="{Binding ShowMsTeamsLogo, Converter={StaticResource InvertedBooleanConverter}}"
+                Text="{Binding BissCommand.Glyph}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                FontSize="Large"
+                Text="{Binding BissCommand.DisplayName}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="3"
+                Grid.Column="1"
+                FontSize="Default"
+                Text="{Binding BissCommand.ToolTip}"
+                VerticalOptions="Center" />
+
+
+            <Label
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="0,0,10,0"
+                FontFamily="{x:StaticResource StreamLineIcons}"
+                FontSize="25"
+                HorizontalOptions="Center"
+                Text="&#xE90C;"
+                VerticalOptions="Center" />
+
+            <BoxView
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                BackgroundColor="{StaticResource AccentColor}" />
+            <BoxView
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                BackgroundColor="{StaticResource AccentColor}" />
+
+            <BoxView
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                BackgroundColor="Transparent">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BissCommand}" NumberOfTapsRequired="1" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

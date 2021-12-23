@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddtionalTextSecondSurveyLink" xml:space="preserve">
+	  <value>Bitte nimm jetzt am zweiten anonymen Screening teil!</value>
+  </data>
+  <data name="BusyContentFinished" xml:space="preserve">
+    <value>Fertig!</value>
+  </data>
+  <data name="BusyContentLoading" xml:space="preserve">
+    <value>Lade {0}%</value>
+  </data>
+  <data name="CmdButtonOk" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="CmdEditDay" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="CmdQuit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="CmdSendEmail" xml:space="preserve">
+    <value>E-Mail senden</value>
+  </data>
+  <data name="CmdSendEmailTooltip" xml:space="preserve">
+    <value>E-Mail an biss@fotec.at senden</value>
+  </data>
+  <data name="CmdStartTimer" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="CmdStartWorking" xml:space="preserve">
+    <value>Arbeit Start </value>
+  </data>
+  <data name="CmdStopWorkingTime" xml:space="preserve">
+    <value>Arbeit Stop</value>
+  </data>
+  <data name="CmdSubMenu" xml:space="preserve">
+    <value>SubMenu</value>
+  </data>
+  <data name="CmdSurveyIgnore" xml:space="preserve">
+    <value>Ignorieren</value>
+  </data>
+  <data name="CmdTestIsBusy" xml:space="preserve">
+    <value>BusyTest</value>
+  </data>
+  <data name="Cmd_Appointments" xml:space="preserve">
+    <value>Kalender </value>
+  </data>
+  <data name="Cmd_Calls" xml:space="preserve">
+    <value>Anrufe</value>
+  </data>
+  <data name="Cmd_DontDisturbSettings" xml:space="preserve">
+    <value>Nicht Stören - Einstellung</value>
+  </data>
+  <data name="Cmd_ToDos" xml:space="preserve">
+    <value>Aufgaben</value>
+  </data>
+  <data name="ErrorMessage_CantStartWork" xml:space="preserve">
+    <value>Arbeit kann zur Zeit nicht gestartet werden!</value>
+  </data>
+  <data name="LblBasic" xml:space="preserve">
+    <value>Viel Spaß beim Testen der App!</value>
+  </data>
+  <data name="LblDemoApp" xml:space="preserve">
+    <value>DEMO App der FOTEC Forschungs- und Technologietransfer GMBH des Bereichs Innovative Software Systems (BISS)</value>
+  </data>
+  <data name="LblFotec" xml:space="preserve">
+    <value>Die FOTEC ist das Forschungsunternehmen der Fachhochschule Wiener Neustadt</value>
+  </data>
+  <data name="LblInfo" xml:space="preserve">
+    <value>Infos per E-Mail unter biss@fotec.at</value>
+  </data>
+  <data name="Lbl_AtWork" xml:space="preserve">
+    <value>Bei der Arbeit</value>
+  </data>
+  <data name="Lbl_DuringFreeTime" xml:space="preserve">
+    <value>In der Freizeit</value>
+  </data>
+  <data name="Lbl_FocusWork" xml:space="preserve">
+    <value>Fokussierte Arbeit/Projekt</value>
+  </data>
+  <data name="Lbl_FreeDay" xml:space="preserve">
+    <value>Kein Arbeitstag!</value>
+  </data>
+  <data name="Lbl_FutureDay" xml:space="preserve">
+    <value>Tag liegt in der Zukunft</value>
+  </data>
+  <data name="Lbl_FutureDaySub" xml:space="preserve">
+    <value>Kann nicht bearbeitet werden</value>
+  </data>
+  <data name="Lbl_Hours" xml:space="preserve">
+    <value>Stunden</value>
+  </data>
+  <data name="Lbl_Infos" xml:space="preserve">
+    <value>Infos</value>
+  </data>
+  <data name="Lbl_NoDataDay" xml:space="preserve">
+    <value>Keine Daten für diesen Tag</value>
+  </data>
+  <data name="Lbl_NoDataDaySub" xml:space="preserve">
+    <value>Tag kann nachträglich bearbeitet werden</value>
+  </data>
+  <data name="Lbl_NoPlanWorkDay" xml:space="preserve">
+    <value>Heute hast du frei! </value>
+  </data>
+  <data name="Lbl_NotAtWork" xml:space="preserve">
+    <value>Freizeit</value>
+  </data>
+  <data name="Lbl_Plan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Lbl_PleaseRecoverToday" xml:space="preserve">
+    <value>Tag ohne reguläre Arbeitszeit</value>
+  </data>
+  <data name="Lbl_RegularWorkingDay" xml:space="preserve">
+    <value>Arbeitstag</value>
+  </data>
+  <data name="Lbl_TimePeriod" xml:space="preserve">
+    <value>Zeitraum</value>
+  </data>
+  <data name="Lbl_Timer" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="Lbl_TimerText" xml:space="preserve">
+    <value>Timertext</value>
+  </data>
+  <data name="Lbl_Total" xml:space="preserve">
+    <value>Gesamt: </value>
+  </data>
+  <data name="Lbl_Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Lbl_WorkInPlanTime" xml:space="preserve">
+    <value>Arbeit im Planzeitraum</value>
+  </data>
+  <data name="Lbl_WorkOutOfPlanTime" xml:space="preserve">
+    <value>Arbeit in Freizeit</value>
+  </data>
+  <data name="MsgBoxHello" xml:space="preserve">
+    <value>Hallo!</value>
+  </data>
+  <data name="MsgBoxTimerAbortCaption" xml:space="preserve">
+    <value>Timer abbrechen?</value>
+  </data>
+  <data name="MsgBoxTimerAbortText" xml:space="preserve">
+    <value>Möchtest du deinen Timer wirklich abbrechen?</value>
+  </data>
+  <data name="MsgBoxTimerWarningCaption" xml:space="preserve">
+    <value>Timer abbrechen?</value>
+  </data>
+  <data name="MsgBoxTimerWarningEnd" xml:space="preserve">
+    <value>Wenn du die Arbeit pausierst, wird dein aktueller Timer gestoppt. Fortfahren?</value>
+  </data>
+  <data name="MsgBoxTimerWarningStart" xml:space="preserve">
+    <value>Wenn du die Arbeit wieder startest, wird dein aktueller Timer gestoppt. Fortfahren?</value>
+  </data>
+  <data name="MsgBoxWorkOutTimeWarning" xml:space="preserve">
+    <value>Möchtest du tatsächlich ausserhalb deiner geplanten Arbeitszeit arbeiten?</value>
+  </data>
+  <data name="MsgBoxWorkOutTimeWarningCaption" xml:space="preserve">
+    <value>Ausserhalb der Arbeitszeit</value>
+  </data>
+  <data name="PickerItemFocusWork" xml:space="preserve">
+    <value>Fokussierte Arbeit/Projekt</value>
+  </data>
+  <data name="PickerItemPause" xml:space="preserve">
+    <value>Freizeit/Pause</value>
+  </data>
+  <data name="PickerItemWork" xml:space="preserve">
+    <value>Arbeit</value>
+  </data>
+  <data name="Subtitle" xml:space="preserve">
+    <value>FOTEC Demo App</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Word_To" xml:space="preserve">
+    <value>bis </value>
+  </data>
+  <data name="MsgBox_TimerIsRunning" xml:space="preserve">
+	  <value>Bearbeiten nicht möglich wenn Arbeit läuft.</value>
+  </data>
+  <data name="MsgBox_TimerIsActive" xml:space="preserve">
+	  <value>Bearbeiten nicht möglich wenn Timer läuft.</value>
+  </data>
+</root>

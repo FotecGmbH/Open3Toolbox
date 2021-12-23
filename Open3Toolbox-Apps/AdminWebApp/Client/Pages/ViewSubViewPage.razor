@@ -1,0 +1,92 @@
+﻿@page "/sensorstatistics/subView"
+@page "/sensorstatistics/subView/{Id:int}"
+
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Resources.ResStatistics  
+
+@inherits ProjectRazorPage<VmSubViewPage>
+
+@inject DialogService DialogService
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewSubViewPage.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-xl p-0">
+                <div class="d-flex flex-row flex-nowrap">
+                    <button class="btn btn-dark my-2"
+                            @onclick="@(() => this.ViewModel.CmdGoBack.Execute(null))">
+                            @IconProvider.RenderBackArrow(2, 2)
+                    </button>
+                    @*<BreadCrumbsComponent Class="mt-3 mr-3 w-100" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-xl my-2 pb-2 border-bottom border-dark">
+                <h1 class="text-center">@this.ViewModel.OriginalName</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl form-group my-2 px-0">
+                <label>@ResViewCommon.Field_Name</label>
+                @{ Action<ChangeEventArgs> action = e =>
+                    {
+                        if (e.Value as string != this.ViewModel.SubView.Name)
+                        {
+                            this.ViewModel.SubView.Name = e.Value as string;
+                            this.ViewModel.SubViewModified = true;
+                            this.StateHasChanged();
+                        }
+                    };
+                }
+                <input class="form-control" type="text" value="@this.ViewModel.SubView.Name" @onchange="action" />
+            </div>
+        </div>
+        <div class="row scrollable-v-lg">
+            <SubViewGridComponent SubViews="this.ViewModel.SubViews" CmdDelete="this.ViewModel.CmdRemoveSubView" CmdVisit="this.ViewModel.CmdVisitSubView" />
+        </div>
+        <div class="row justify-content-start">
+            <span class="w-50 d-flex flex-row flex-nowrap align-items-center">
+                <button class="btn btn-success my-2"
+                        @onclick="@(() => this.ViewModel.CmdAddSubView.Execute(this._toAdd))"
+                        disabled="@(this._toAdd is null)">
+                    <span class="d-flex flex-row flex-nowrap align-items-center">
+                        @IconProvider.RenderFilledPlusIcon()
+                    </span>
+                </button>
+                <span class="mx-1" />
+                <RadzenDropDown Data="this.ViewModel.GetSubViewOptions()" @bind-Value="this._toAdd" />
+            </span>
+        </div>
+        <div class="row">
+            <button class="btn btn-success col mr-3 w-25"
+                    @onclick="@(() => this.ViewModel.CmdSaveChanges.Execute(null))"
+                    disabled="@(!this.ViewModel.CmdSaveChanges.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                    @this.ViewModel.CmdSaveChanges.DisplayName
+                    <span class="mx-1" />
+                    @IconProvider.RenderSaveIcon()
+                </span>
+            </button>
+            <button class="btn btn-danger col ml-3 w-25"
+                    @onclick="@(() => this.ViewModel.CmdUndoChanges.Execute(null))"
+                    disabled="@(!this.ViewModel.CmdUndoChanges.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                    @this.ViewModel.CmdUndoChanges.DisplayName
+                    <span class="mx-1" />
+                    @IconProvider.RenderUndoIcon()
+                </span>
+            </button>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+    private IVmSubView _toAdd = null!;
+}

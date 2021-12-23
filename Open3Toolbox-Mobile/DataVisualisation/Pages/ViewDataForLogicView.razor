@@ -1,0 +1,64 @@
+﻿@page "/ViewDataForLogicView/{id}"
+@inject HttpClient Http
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<PageTitle>Physikalische Ansicht</PageTitle>
+<div class="row">
+    @if(userView != null && userView.UserLogicViews != null && userView.UserLogicViews.Any())
+    {
+        foreach(var measurement in userView.UserLogicViews)
+        {
+            <div class="col-md-12 col-sm-12 col-lg-6 p-2">
+
+             <RadzenCard  class="mt-2">
+                    <div>
+                        <RadzenIcon Icon="lightbulb"></RadzenIcon>
+                        <h3 class="mb-0"><span class="badge bg-primary text-white">@measurement.Name</span></h3>
+                        <p><span class="badge bg-secondary text-white">Messwert</span></p>
+                        <br>
+                        <p>Aktuellster Messwert <strong>@measurement.MeasurementValues.FirstOrDefault()?.Value</strong></p>
+                        <p>Messung wurde zur folgenden Zeit durchgeführt <strong>@measurement.MeasurementValues.FirstOrDefault()?.TimeStamp</strong></p>
+                        <p>Der Messwert wurde an folgender GPS Position ermittelt <strong>Lat: @(@measurement.MeasurementValues.FirstOrDefault()?.Latitude), Long: @(@measurement.MeasurementValues.FirstOrDefault()?.Longitude), Alt: @(@measurement.MeasurementValues.FirstOrDefault()?.Altitude)</strong></p>
+                    </div>
+             </RadzenCard>
+             </div>
+        }
+    }
+    
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    string baseUrl = "https://localhost:5003/";
+
+    ExUserLogicView userView = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var logicViews = await localStorage.GetItemAsync<string>("logicViews");
+        int IdAsInt = int.Parse(Id);
+        var LstUserLogicViews = JsonConvert.DeserializeObject<List<ExUserLogicView>>(logicViews);
+
+        userView = LstUserLogicViews.FirstOrDefault(a => a.Id == IdAsInt);
+        Client c = new Client(baseUrl, Http);
+
+        foreach(var m in userView.UserLogicViews)
+        {
+            m.MeasurementValues = new List<MeasurementValue>();
+            var latestValue = (await c.QueryAsync(m.Id, false, 1, 0)).FirstOrDefault();
+            m.MeasurementValues.Add(latestValue);
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+}

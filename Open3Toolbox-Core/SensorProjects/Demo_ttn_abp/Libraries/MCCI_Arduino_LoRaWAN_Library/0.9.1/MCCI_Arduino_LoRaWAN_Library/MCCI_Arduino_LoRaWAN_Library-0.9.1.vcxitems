@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{c0c0312c-b9e6-4793-bece-be0e8d0010bb}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_as923_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_as923_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_au915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_au915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_eu868_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_eu868_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_in866_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_in866_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_kr920_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_kr920_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\actility_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan_begin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan_cEventLog.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan_loop.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan_sessionstate.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\arduino_lorawan_shutdown.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_as923_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_as923_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_au915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_au915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_eu868_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_eu868_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_in866_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_in866_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_kr920_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_kr920_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\chirpstack_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_as923_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_as923_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_au915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_au915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_eu868_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_eu868_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_in866_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_in866_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_kr920_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_kr920_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\generic_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\GetCountryCode.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\GetRegion.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\GetRegionString.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\GetTxReady.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\helium_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\helium_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\helium_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\LogPrintf.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\machineq_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\machineq_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\machineq_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\SendBuffer.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senet_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senet_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senet_us915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senra_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senra_in866_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\senra_in866_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\SetLinkCheckMode.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\swisscom_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\swisscom_eu868_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\swisscom_eu868_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_as923_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_as923_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_au915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_au915_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_base_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_eu868_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_eu868_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_in866_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_in866_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_kr920_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_kr920_netjoin.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_us915_netbeginregioninit.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\lib\ttn_us915_netjoin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Actility.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_ChirpStack.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_EventLog.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Generic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Helium.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_lmic.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_machineQ.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_network.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Senet.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Senra.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_Swisscom.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\Arduino_LoRaWAN_ttn.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+<Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)library.json" />
+<None Include="$(MSBuildThisFileDirectory)LICENSE" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>

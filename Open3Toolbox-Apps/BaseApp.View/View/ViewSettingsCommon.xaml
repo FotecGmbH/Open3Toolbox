@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewSettingsCommon"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:userApps="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmSettingsCommon.DesignInstance}"
+    x:TypeArguments="userApps:VmSettingsCommon"
+    ControlTemplate="{x:StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollView
+            Grid.Row="1"
+            Padding="20,0"
+            VerticalScrollBarVisibility="Always">
+            <StackLayout>
+                <Label
+                    Margin="0,0,0,10"
+                    LineBreakMode="WordWrap"
+                    Style="{StaticResource PageTitleStyle}"
+                    Text="{Binding PageTitle}" />
+
+                <Label
+                    FontSize="Default"
+                    LineBreakMode="WordWrap"
+                    Text="Soll automatisch deine Arbeitsaufzeichnung gestartet und gestoppt werden?" />
+
+                <Frame
+                    Margin="5,10"
+                    Padding="10"
+                    CornerRadius="10">
+
+                    <Grid ColumnSpacing="0" RowSpacing="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="Start"
+                            Text="{x:Static resources:ResViewSettings.Lbl_AutoWorkStart}" />
+                        <Switch
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsToggled="{Binding Dc.DcExUserSettings.Data.AutoWorkStart}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalOptions="Start"
+                            Text="{x:Static resources:ResViewSettings.Lbl_AutoWorkEnd}" />
+                        <Switch
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            IsToggled="{Binding Dc.DcExUserSettings.Data.AutoWorkEnd}" />
+
+                    </Grid>
+                </Frame>
+
+
+
+                <Label
+                    FontSize="Default"
+                    LineBreakMode="WordWrap"
+                    Text="Wie soll deine fokusierte Arbeit oder dein Projekt benannt werden?" />
+                <Frame
+                    Margin="5,10"
+                    Padding="10"
+                    CornerRadius="10">
+                    <StackLayout>
+                        <Entry Text="{Binding Dc.DcExUserSettings.Data.FocusTimeUiName}" />
+                        <Label
+                            FontSize="Small"
+                            IsVisible="{Binding EntryFocusHasError}"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding EntryFocusError}"
+                            TextColor="{StaticResource ErrorColor}" />
+                    </StackLayout>
+                </Frame>
+
+
+                <!--<Label
+                    Margin="10,10,10,0"
+                    HorizontalOptions="Start"
+                    Text="{x:Static res:ResViewSettings.Lbl_Accuracy}" />
+
+                <Picker
+                    Margin="10,0,10,10"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="False"
+                    ItemDisplayBinding="{Binding DisplayString}"
+                    ItemsSource="{Binding Accuracies}"
+                    SelectedItem="{Binding SelectedAccuracy}" />-->
+
+                <Button
+                    Command="{Binding CmdStore}"
+                    HeightRequest="50"
+                    Text="{Binding CmdStore.DisplayName}" />
+
+            </StackLayout>
+        </ScrollView>
+
+        <controls:Header Grid.Row="0" ShowBack="True" />
+        <controls:Footer Grid.Row="2" IsVisible="{Binding ShowFooter}" />
+    </Grid>
+</view:BissContentPage>

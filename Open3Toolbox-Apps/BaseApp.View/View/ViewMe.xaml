@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewMe"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rad="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmMe.DesignInstance}"
+    x:TypeArguments="viewmodels:VmMe"
+    ControlTemplate="{StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollView Grid.Row="1">
+
+            <Grid Margin="0,0" RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+
+                <Grid
+                    Grid.Row="0"
+                    Padding="0,10"
+                    HorizontalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Frame
+                        x:Name="FrameImage"
+                        Grid.Row="0"
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        BorderColor="{StaticResource AccentColor}"
+                        CornerRadius="100"
+                        HeightRequest="200"
+                        HorizontalOptions="Center"
+                        IsClippedToBounds="true"
+                        WidthRequest="200">
+                        <Image
+                            Aspect="AspectFit"
+                            HeightRequest="{Binding Source={x:Reference FrameImage}, Path=Height}"
+                            HorizontalOptions="Center"
+                            Source="{Binding Dc.DcExGraphData.Data.UserImage, Converter={x:StaticResource ConverterUrlToImageSource}, ConverterParameter=user}"
+                            VerticalOptions="Center"
+                            WidthRequest="{Binding Source={x:Reference FrameImage}, Path=Width}" />
+                    </Frame>
+                </Grid>
+
+                <Label
+                    Grid.Row="1"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="{Binding Dc.DcExGraphData.Data.DisplayName}"
+                    VerticalOptions="End" />
+
+                <Label
+                    Grid.Row="2"
+                    HorizontalOptions="Center"
+                    Text="{Binding Dc.DcExGraphData.Data.Mail}" />
+
+
+                <Label
+                    Grid.Row="4"
+                    HorizontalOptions="Center"
+                    Text="{x:Static res:ResViewMe.Lbl_DeviceId}"
+                    VerticalOptions="End" />
+
+                <Label
+                    Grid.Row="5"
+                    HorizontalOptions="Center"
+                    Text="{Binding Dc.CoreConnectionInfos.DeviceId}"
+                    VerticalOptions="Start" />
+
+                <Label
+                    Grid.Row="6"
+                    HorizontalOptions="Center"
+                    Text="{x:Static res:ResViewMe.Lbl_UserId}"
+                    VerticalOptions="End" />
+
+                <Label
+                    Grid.Row="7"
+                    HorizontalOptions="Center"
+                    Text="{Binding Dc.CoreConnectionInfos.UserId}"
+                    VerticalOptions="Start" />
+
+                <Button
+                    Grid.Row="9"
+                    Margin="0,5,0,0"
+                    Command="{Binding CsvDownloadCommand}"
+                    HorizontalOptions="Center"
+                    Text="{Binding CsvDownloadCommand.DisplayName}" />
+
+                <Button
+                    Grid.Row="10"
+                    Margin="0,5,0,0"
+                    Command="{Binding CmdLogout}"
+                    HorizontalOptions="Center"
+                    Text="{Binding CmdLogout.DisplayName}" />
+
+                <Button
+                    Grid.Row="11"
+                    Margin="0,5,0,0"
+                    Command="{Binding CmdDeleteAccount}"
+                    HorizontalOptions="Center"
+                    Text="{Binding CmdDeleteAccount.DisplayName}" />
+            </Grid>
+        </ScrollView>
+
+        <controls:Header Grid.Row="0" />
+        <controls:Footer Grid.Row="2" />
+
+    </Grid>
+</view:BissContentPage>

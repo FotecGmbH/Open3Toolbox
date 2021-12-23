@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewSettingsPush"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:me="clr-namespace:BaseApp.MarkupExtensions"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmSettingsPush.DesignInstance}"
+    x:TypeArguments="viewmodels:VmSettingsPush"
+    ControlTemplate="{StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                LineBreakMode="WordWrap"
+                Style="{StaticResource PageTitleStyle}"
+                Text="{Binding PageTitle}" />
+
+
+            <!--#region Content-->
+            <ScrollView Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--#region Push an/aus-->
+                    <Frame
+                        Grid.Row="0"
+                        Margin="10"
+                        Padding="10"
+                        CornerRadius="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+
+                            <Label
+                                HorizontalOptions="Start"
+                                Text="{x:Static resources:ResViewSettingsPush.Lbl_Active}"
+                                VerticalOptions="Center" />
+                            <Switch
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                IsToggled="{Binding PushEnabled}"
+                                VerticalOptions="CenterAndExpand" />
+                            <BoxView
+                                Grid.Column="1"
+                                BackgroundColor="Transparent"
+                                HeightRequest="30"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="CenterAndExpand">
+                                <BoxView.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CmdOpenDevicePushSettings}" NumberOfTapsRequired="1" />
+                                </BoxView.GestureRecognizers>
+                            </BoxView>
+                        </Grid>
+                    </Frame>
+                    <!--#endregion-->
+
+                    <!--#region Detaillierte Push Einstellungen-->
+                    <StackLayout Grid.Row="1" Margin="0">
+
+                        <!--#region Arbeit-->
+                        <Label
+                            Margin="20,0,0,0"
+                            FontSize="14"
+                            HorizontalOptions="Start"
+                            Text="Arbeit"
+                            TextColor="{StaticResource AccentColor}"
+                            VerticalTextAlignment="End" />
+
+                        <Frame
+                            Margin="10,0,10,10"
+                            Padding="10"
+                            CornerRadius="10">
+                            <StackLayout Margin="0" Padding="0">
+                                <!--#region Arbeitsbeginn-->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{x:Static resources:ResViewSettingsPush.Lbl_WorkStart}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnWorkStart}" />
+                                </Grid>
+
+                                <!--#endregion-->
+
+                                <BoxView
+                                    BackgroundColor="{StaticResource SeparatorLineColor}"
+                                    HeightRequest="1"
+                                    HorizontalOptions="FillAndExpand"
+                                    Opacity="0.3" />
+                                <!--#region Arbeitsende-->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{x:Static resources:ResViewSettingsPush.Lbl_WorkEnd}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnWorkEnd}" />
+                                </Grid>
+                                <!--#endregion-->
+                                <BoxView
+                                    BackgroundColor="{StaticResource SeparatorLineColor}"
+                                    HeightRequest="1"
+                                    HorizontalOptions="FillAndExpand"
+                                    Opacity="0.3" />
+                                <!--#region Erinnerung Pause-->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{x:Static res:ResViewSettingsPush.Lbl_ReminderPause}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnPauseReminder}" />
+                                </Grid>
+                                <!--#endregion-->
+                            </StackLayout>
+                        </Frame>
+                        <!--#endregion-->
+
+                        <!--#region Timer?-->
+                        <Label
+                            Margin="20,0,0,0"
+                            FontSize="14"
+                            HorizontalOptions="Start"
+                            Text="{x:Static res:ResViewSettingsPush.Lbl_Timer}"
+                            TextColor="{StaticResource AccentColor}"
+                            VerticalTextAlignment="End" />
+
+                        <Frame
+                            Margin="10,0,10,10"
+                            Padding="10"
+                            CornerRadius="10">
+                            <StackLayout>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{x:Static res:ResViewSettingsPush.Lbl_PauseEnd}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnPauseEnd}" />
+                                </Grid>
+                                <BoxView
+                                    BackgroundColor="{StaticResource SeparatorLineColor}"
+                                    HeightRequest="1"
+                                    HorizontalOptions="FillAndExpand"
+                                    Opacity="0.3" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{Binding Dc.DcExUserSettings.Data.FocusTimeUiName}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnFocusEnd}" />
+                                </Grid>
+
+
+                            </StackLayout>
+                        </Frame>
+                        <!--#endregion-->
+
+                        <!--#region Freizeit-->
+                        <Label
+                            Margin="20,0,0,0"
+                            FontSize="14"
+                            HorizontalOptions="Start"
+                            Text="{x:Static res:ResViewSettingsPush.Lbl_Freetime}"
+                            TextColor="{StaticResource AccentColor}"
+                            VerticalTextAlignment="End" />
+
+                        <Frame
+                            Margin="10,0,10,10"
+                            Padding="10"
+                            CornerRadius="10">
+                            <StackLayout>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{x:Static res:ResViewSettingsPush.Lbl_WorkInFreetime}"
+                                        VerticalTextAlignment="Center" />
+                                    <Switch
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        IsToggled="{Binding Dc.DcExUserSettings.Data.PushNotificationOnWorkInFreetime}" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                        <!--#endregion-->
+                    </StackLayout>
+                    <!--#endregion-->
+
+                    <!--#region Push deaktiviert Hinweistext-->
+                    <Grid
+                        Grid.Row="1"
+                        Margin="5,0"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding PushEnabled, Converter={StaticResource InvertedBooleanConverter}}"
+                        VerticalOptions="FillAndExpand">
+                        <BoxView
+                            BackgroundColor="{StaticResource WhiteColor}"
+                            HorizontalOptions="FillAndExpand"
+                            Opacity="0.95"
+                            VerticalOptions="FillAndExpand" />
+                        <Label
+                            FontSize="{StaticResource LargeSize}"
+                            HorizontalTextAlignment="Center"
+                            Text="{x:Static res:ResViewSettingsPush.Lbl_PushDisabled}"
+                            VerticalTextAlignment="Center" />
+                    </Grid>
+                    <!--#endregion-->
+                </Grid>
+            </ScrollView>
+            <!--#endregion-->
+
+        </Grid>
+
+
+
+
+        <controls:Header Grid.Row="0" ShowBack="True" />
+
+        <!--<controls:Footer
+            Grid.Row="2" />-->
+    </Grid>
+</view:BissContentPage>

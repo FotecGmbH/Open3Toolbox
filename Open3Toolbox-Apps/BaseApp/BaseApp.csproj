@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!-- Package Infos -->
+    <Product>BaseApp</Product>
+    <Description>ViewModels für die App</Description>
+    <Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+    <Copyright>(C) 2009-2020 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+    <Authors>BISS</Authors>
+    <NeutralLanguage>de</NeutralLanguage>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
+    <Version>0.5.0.0</Version>
+    <!-- Pflicht! -->
+    <Nullable>Enable</Nullable>
+    <!-- Analyzers Einstellungen -->
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <!-- Build Einstellungen -->
+    <SignAssembly>false</SignAssembly>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Biss" Version="5.1.9" />
+    <PackageReference Include="Biss.Apps.Push" Version="7.1.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.30.1" />
+    <PackageReference Include="Biss.Apps" Version="7.2.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Open3Toolbox-Core\ExchangeLibrary\ExchangeLibrary.csproj" />
+    <ProjectReference Include="..\Exchange\Exchange.csproj" />
+  </ItemGroup>
+</Project>

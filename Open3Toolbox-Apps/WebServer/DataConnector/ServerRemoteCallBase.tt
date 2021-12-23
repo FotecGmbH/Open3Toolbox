@@ -1,0 +1,197 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ Assembly Name="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+// (C) 2021 FOTEC Forschungs- und Technologietransfer GmbH
+// Das Forschungsunternehmen der Fachhochschule Wiener Neustadt
+// 
+// Kontakt biss@fotec.at / www.fotec.at
+//
+// Automatisch generierter Code. Nicht verändern!
+// Erstellt am <#= DateTime.Now #>
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Biss.Dc.Core;
+using Biss.Dc.Server;
+using Biss.Serialize;
+using Exchange.Model;
+using Exchange.Model.ConfigurationTool;
+using ExConfigExchange.Models;
+using ExConfigExchange.Models.Interfaces;
+using Exchange.Model.Statistics;
+
+namespace WebServer.DataConnector
+{
+    /// <summary>
+    /// <para>ServerRemoteCallBase</para>
+    /// Klasse ServerRemoteCallBase. (C) 2020 FOTEC Forschungs- und Technologietransfer GmbH
+    /// </summary>
+    public abstract class ServerRemoteCallBase
+    {
+        /// <summary>
+        /// Zugriff auf die Kommunikation mit den angemeldeten Clients
+        /// </summary>
+        public IDcConnections ClientConnection { get; set; }
+
+        /// <summary>
+        /// Workaround um in den Server-Funktionen den Zugriff auf alle angemeldeten Clients zu ermöglichen
+        /// </summary>
+        /// <param name="connection"></param>
+        public void SetClientConnection(object connection)
+        {
+            if (connection is IDcConnections con)
+            {
+                ClientConnection = con;
+            }
+            else
+            {
+                throw new InvalidCastException();
+            }
+        }
+
+        #region Sendefunktionen
+
+<#
+    //string app = @"C:\Code\FOTEC\BISS\BISS.DataConnector\DcHelper\bin\Debug\netcoreapp3.1\DcHelper.exe";
+    string app = @"DcHelper.exe";
+    
+    var serviceProvider = this.Host as IServiceProvider;
+    var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+    var root = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+        string ass = root + @"\BaseApp\bin\Debug\netstandard2.1\BaseApp.dll";
+    FileInfo fi = new FileInfo(ass);
+    var test = fi.FullName;
+    List<string> addPath = new List<string>(){root + @"\AndroidApp\bin\Debug\netstandard2.1", 
+                                              root + @"\IOsApp\bin\iPhoneSimulator\Debug",
+                                              root + @"\WpfApp\bin\Debug\net5.0-windows"                                            
+    };
+    var n = GetNames(app,ass,addPath);
+
+
+    foreach (var s in n)
+    {
+        var t = s.Split(';');if (t[0] == "point")
+        {#>
+
+        /// <summary>
+        /// Daten an <#= t[1] #> senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="data">Daten</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        public async Task<int> Send<#= t[1] #>(<#=t[2]#> data, long? deviceId = null, long? userId = null)
+        {
+            return await SendInternal("<#= t[1] #>", data.ToJson(), deviceId, userId);
+        }
+
+<#
+        }
+        else if (t[0] == "list")
+        {
+        #>
+
+        /// <summary>
+        /// Listen Daten an <#= t[1] #> senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="data">Daten</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        public async Task<int> Send<#= t[1] #>(List<DcServerListItem<<#=t[2]#>>> data, long? deviceId = null, long? userId = null)
+        {
+            var tmp = data.Select(item => item.ToDcTransferListItem()).ToList();
+            return await SendInternal("<#= t[1] #>", tmp.ToJson(), deviceId, userId);
+        }
+
+<#
+        }
+    }
+#>
+
+        /// <summary>
+        /// Daten senden.
+        /// Wenn deviceId und userId null sind werden die Daten an alle Geräte gesendet
+        /// </summary>
+        /// <param name="dpId">Datenpunkt Id</param>
+        /// <param name="data">Daten in Json serialisiert</param>
+        /// <param name="deviceId">An ein bestimmtes Gerät</param>
+        /// <param name="userId">An einen bestimmten Benutzer</param>
+        /// <returns>Anzahl der erreichten Geräte</returns>
+        private async Task<int> SendInternal(string dpId, string data, long? deviceId, long? userId)
+        {
+            var d = new DcResult(dpId) {JsonData = data};
+            d.Checksum = DcChecksum.Generate(d.JsonData);
+
+            int result = 0;
+
+            if (deviceId == null && userId == null)
+            {
+                result = await ClientConnection.SendData(d);
+            }
+            else if (userId != null)
+            {
+                result = await ClientConnection.SendDataToUser(userId.Value,d);
+            }
+            else if (deviceId != null)
+            {
+                if (await ClientConnection.SendDataToDevice(deviceId.Value, d))
+                {
+                    result = 1;
+                }
+            }
+            return result;
+        }
+
+        #endregion
+
+    }
+}
+
+<#+
+  // Insert any template procedures here
+  List<string> GetNames(string helper, string assembly, List<string> searchPaths = null)
+        {
+            var data = new List<string>();
+            Process p = new Process();
+
+            p.StartInfo.FileName = helper;
+            string param = "extract -a " + assembly;
+            if (searchPaths != null && searchPaths.Count > 0)
+            {
+                foreach (var path in searchPaths)
+                {
+                    param += " -p " + path;
+                }
+            }
+            p.StartInfo.Arguments = param;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+
+            p.OutputDataReceived += (sender, args) =>
+            {
+                if (!String.IsNullOrEmpty(args.Data))
+                    data.Add(args.Data);
+            };
+            var exitcode = p.Start();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+
+
+            //Process.Start(helper);
+
+            return data;
+        }
+#>

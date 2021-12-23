@@ -1,0 +1,27 @@
+﻿@*@page "/"
+@page "/home"
+@using BaseApp
+
+@inherits ProjectRazorPage<VmAdminMain>
+
+<CardContainer Title="Project">
+
+    <p>
+        Project
+    </p>
+
+</CardContainer>
+
+@code {
+
+    private void LaunchBissApps()
+    {
+        //Task.Run(async () =>
+        //{
+        //    var test = JsRuntime.InvokeAsync<string>("blazorExtensions.ReadCookie", "UserInfo").Result;
+        //});
+
+        VmProjectBase.LaunchFirstView();
+    }
+
+}*@

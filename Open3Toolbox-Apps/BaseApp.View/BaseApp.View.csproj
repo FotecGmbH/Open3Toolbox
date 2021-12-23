@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssetTargetFallback>portable-net451+win10+netcoreapp31+monoandroid11.0+xamarinios10</AssetTargetFallback>
+    <!-- Package Infos -->
+    <Product>BaseApp Views</Product>
+    <Description>Xamarin Forms Views für die App</Description>
+    <Company>FOTEC Forschungs- und Technologietransfer GmbH</Company>
+    <Copyright>(C) 2009-2020 FOTEC Forschungs- und Technologietransfer GmbH</Copyright>
+    <Authors>BISS</Authors>
+    <NeutralLanguage>de</NeutralLanguage>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
+    <Version>0.5.0.0</Version>
+    <!-- Pflicht! -->
+    <Nullable>Enable</Nullable>
+    <!-- Build Einstellungen -->
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <SignAssembly>false</SignAssembly>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>BaseApp</RootNamespace>
+    <!-- NoWarn für Missmatch bei .NetStandard 2.1 und .Netcore 3.1 -->
+    <NoWarn>NU1201,NU1202</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+	  <PackageReference Include="Biss" Version="5.1.9" />
+	  <PackageReference Include="Biss.Apps.Controls" Version="7.0.1" />
+	  <PackageReference Include="Biss.Apps.Controls.Telerik" Version="7.0.1" />
+	  <PackageReference Include="Biss.Apps.XF" Version="7.2.0" />
+	  <PackageReference Include="BISS.Apps.Connectivity" Version="7.1.2" />
+	  <PackageReference Include="BISS.Apps.Connectivity.XF" Version="7.1.2" />
+	  <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
+	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
+	  <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+	  <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="18.4.0.48" />
+	  <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="18.4.0.48" />
+	  <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Open3Toolbox-Core\ExchangeLibrary\ExchangeLibrary.csproj" />
+    <ProjectReference Include="..\BaseApp\BaseApp.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Exchange\Resources\Fonts\SourceSansPro-Regular.ttf" Link="Fonts\SourceSansPro-Regular.ttf" />
+    <EmbeddedResource Include="..\Exchange\Resources\Fonts\StreamLineIcons.ttf" Link="Fonts\StreamLineIcons.ttf" />
+    <EmbeddedResource Include="..\Exchange\Resources\Fonts\StreamLineIconsBold.ttf" Link="Fonts\StreamLineIconsBold.ttf" />
+    <EmbeddedResource Include="..\Exchange\Resources\Fonts\StreamLineIconsLight.ttf" Link="Fonts\StreamLineIconsLight.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="View\ConfigurationTool\ViewExConfigItemDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="View\ConfigurationTool\ViewExConfigurableDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="View\ConfigurationTool\ViewGateways.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="View\ConfigurationTool\ViewProjects.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="View\ConfigurationTool\ViewSensors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="View\ConfigurationTool\" />
+  </ItemGroup>
+</Project>

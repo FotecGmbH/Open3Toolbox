@@ -1,0 +1,94 @@
+﻿@using Telerik.Blazor.Components;
+
+<TelerikWindow Class="MyClass" @bind-Visible="@IsVisible">
+    <WindowTitle>
+        <strong>@Title</strong>
+    </WindowTitle>
+    <WindowContent>
+        @Message
+        <br />
+        <button @onclick="@OnOK">OK</button>
+    </WindowContent>
+</TelerikWindow>
+
+<style>
+    .MyClass { /* targets the entire popup element */
+        border: @this.BorderThickness solid @this.BorderColor;
+    }
+
+    .MyClass .k-window-content { /* targets the content element */
+        background: @ContentBackgroundColor;
+    }
+
+    .MyClass .k-window-title { /* targets the title container */
+        color: @TitleColor;
+    }
+
+    .MyClass .k-window-titlebar { /* targets the entire titlebar */
+        background: @TitleBarBackgroundColor;
+    }
+</style>
+
+@code
+{
+    #region Main Properties
+    /// <summary>
+    /// The title of the popup window.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; }
+
+    /// <summary>
+    /// The message shown inside.
+    /// </summary>
+    [Parameter]
+    public string Message { get; set; }
+
+    /// <summary>
+    /// Changes the popup windows visibility.
+    /// </summary>
+    [Parameter]
+    public bool IsVisible { get; set; }
+    #endregion
+
+    #region CSS Styling
+    /// <summary>
+    /// Sets the color of the popup windows border, takes a CSS string.
+    /// </summary>
+    [Parameter]
+    public string BorderColor { get; set; } = "red";
+
+    /// <summary>
+    /// Sets the thickness of the popup windows border, takes a CSS string.
+    /// </summary>
+    [Parameter]
+    public string BorderThickness { get; set; } = "0px";
+
+    /// <summary>
+    /// Sets the color of the popup windows content background, takes a CSS string.
+    /// </summary>
+    [Parameter]
+    public string ContentBackgroundColor { get; set; } = "white";
+
+    /// <summary>
+    /// Sets the color of the popup windows title, takes a CSS string.
+    /// </summary>
+    [Parameter]
+    public string TitleColor { get; set; } = "white";
+
+    /// <summary>
+    /// Sets the color of the popup windows title bars background, takes a CSS string.
+    /// </summary>
+    [Parameter]
+    public string TitleBarBackgroundColor{ get; set; } = "red";
+    #endregion
+
+    [Parameter]
+    public EventCallback OnOk { get; set; }
+
+    private async void OnOK()
+    {
+        this.IsVisible = false;
+        await this.OnOk.InvokeAsync(new object());
+    }
+}

@@ -1,0 +1,145 @@
+﻿@page "/sensorstatistics/finalSubView"
+@page "/sensorstatistics/finalSubView/{Id:int}"
+
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Resources.ResStatistics
+@using Exchange.Model.Statistics
+
+@inherits ProjectRazorPage<VmFinalSubViewPage>
+
+@inject DialogService DialogService
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewFinalSubViewPage.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-xl p-0">
+                <div class="d-flex flex-row flex-nowrap">
+                    <button class="btn btn-dark my-2"
+                            @onclick="@(() => this.ViewModel.CmdGoBack.Execute(null))">
+                        @IconProvider.RenderBackArrow(2, 2)
+                    </button>
+                    @*<BreadCrumbsComponent Class="mt-3 mr-3 w-100" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-xl my-2 pb-2 border-bottom border-dark">
+                <h1 class="text-center">@this.ViewModel.OriginalName</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl form-group my-2 px-0">
+                <label>@ResViewCommon.Field_Name</label>
+                @{ Action<ChangeEventArgs> action = e =>
+                       {
+                           if (e.Value as string != this.ViewModel.FinalSubView.Name)
+                           {
+                               this.ViewModel.FinalSubView.Name = e.Value as string;
+                               this.ViewModel.FinalSubViewModified = true;
+                               this.StateHasChanged();
+                           }
+                       };
+                }
+                <input class="form-control" type="text" value="@this.ViewModel.FinalSubView.Name" @onchange="action" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl my-2 px-0">
+                <RadzenDataGrid @ref="this._grid" TItem="IVmFinalView" AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Simple" PageSize="this.pageSize" AllowPaging="true" AllowSorting="true" Data="@this.ViewModel.FinalViews" ColumnWidth="300px">
+                    <Columns>
+                        <RadzenDataGridColumn Title="Name" TItem="IVmFinalView" Property="@nameof(IVmFinalView.Name)" />
+                        <RadzenDataGridColumn Title="Type" TItem="IVmFinalView" Property="@nameof(IVmFinalView.Type)" />
+                        <RadzenDataGridColumn Title="" TItem="IVmFinalView" Sortable="false" Width="100px" Frozen="true">
+                            <Template Context="data">
+                                <div class="d-flex flex-row flex-wrap justify-content-center">
+                                    <button class="btn btn-outline-secondary m-1"
+                                            @onclick="() => this.ViewModel.CmdVisitFinalView.Execute(data)"
+                                            disabled="@(!this.ViewModel.CmdVisitFinalView.CanExecuteProperty)">
+                                        @IconProvider.RenderEditIcon()
+                                    </button>
+                                    <button class="btn btn-outline-danger m-1"
+                                            @onclick="() => this.RemoveFinalView(data)"
+                                            disabled="@(!this.ViewModel.CmdRemoveFinalView.CanExecuteProperty)">
+                                        @IconProvider.RenderDeleteIcon()
+                                    </button>
+                                </div>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </div>
+        </div>
+        <div class="row justify-content-start">
+            <button class="btn btn-success my-2 w-25"
+                    @onclick="this.HandleFinalViewChoice"
+                    disabled="@(!this.ViewModel.CmdAddFinalView.CanExecuteProperty)">
+                @IconProvider.RenderFilledPlusIcon()
+            </button>
+        </div>
+        <div class="row">
+            <button class="btn btn-success col mr-3 w-25"
+                    @onclick="@(() => this.ViewModel.CmdSaveChanges.Execute(null))"
+                    disabled="@(!this.ViewModel.CmdSaveChanges.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                    @this.ViewModel.CmdSaveChanges.DisplayName
+                    <span class="mx-1" />
+                    @IconProvider.RenderSaveIcon()
+                </span>
+            </button>
+            <button class="btn btn-danger col ml-3 w-25"
+                    @onclick="@(() => this.ViewModel.CmdUndoChanges.Execute(null))"
+                    disabled="@(!this.ViewModel.CmdUndoChanges.CanExecuteProperty)">
+                <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                    @this.ViewModel.CmdUndoChanges.DisplayName
+                    <span class="mx-1" />
+                    @IconProvider.RenderUndoIcon()
+                </span>
+            </button>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+    // On some operations you must control the grid manualy (e.g.StateHasChanged).
+    private RadzenDataGrid<IVmFinalView> _grid = null!;
+
+    // Number of elements, which should be displayed on the grid
+    private readonly int pageSize = 5;
+
+    private async Task RemoveFinalView(IVmFinalView vmFinalView)
+    {
+        this.ViewModel.CmdRemoveFinalView.Execute(vmFinalView);
+        await this._grid.Reload().ConfigureAwait(true);
+        if (this._grid.CurrentPage != 0
+            && this.ViewModel.FinalViews.Count % this.pageSize == 0
+            && this.ViewModel.FinalViews.Count / this.pageSize == this._grid.CurrentPage) // If the deleted elemnt is the last one, go one back
+            await this._grid.PrevPage().ConfigureAwait(true);
+    }
+
+    private async Task HandleFinalViewChoice()
+    {
+        var options = this.ViewModel.FinalViewOptions;
+        var choosen = await this.GetOption(options).ConfigureAwait(true);
+        if (choosen is null)
+            return;
+        this.ViewModel.CmdAddFinalView.Execute(choosen);
+        await this._grid.Reload().ConfigureAwait(true);
+    }
+
+    private async Task<IVmFinalView> GetOption(ICollection<IVmFinalView> options)
+    {
+        if (options.Count < 2)
+            return options.FirstOrDefault();
+
+        var selectedName = (string)await this.DialogService.OpenAsync(Exchange.Resources.ResConfigurationTool.ResViewCommon.PromptTitle_Choose, ds =>@<PickerDialogComponent DialogService="ds" Keys="options.Select(o => o.Name).ToList()" />);
+if (selectedName is null)
+return null;
+return options.First(o => o.Name == selectedName);
+}
+}

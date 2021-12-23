@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BissContentPage
+    x:Class="BaseApp.View.ViewSettingsMicrosoftToDo"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:BaseApp.Controls;assembly=BaseApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:resources="clr-namespace:Exchange.Resources;assembly=Exchange"
+    xmlns:view="clr-namespace:Biss.Apps.View;assembly=Biss.Apps.XF"
+    xmlns:viewmodels="clr-namespace:BaseApp.ViewModel;assembly=BaseApp"
+    Title=""
+    d:DataContext="{x:Static viewmodels:VmSettingsMicrosoftToDo.DesignInstance}"
+    x:TypeArguments="viewmodels:VmSettingsMicrosoftToDo"
+    ControlTemplate="{StaticResource MainPageTemplate}"
+    IsBusy="{Binding IsBusy}"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    mc:Ignorable="d">
+
+
+    <Grid ColumnSpacing="0" RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Padding="20,10,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+
+            <Label
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                LineBreakMode="WordWrap"
+                Style="{StaticResource PageTitleStyle}"
+                Text="{Binding PageTitle}" />
+
+            <Label
+                Grid.Row="1"
+                FontSize="Default"
+                LineBreakMode="WordWrap"
+                Text="ToDos verwenden?" />
+
+            <Frame
+                Grid.Row="2"
+                Margin="5,10"
+                Padding="10"
+                CornerRadius="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        HorizontalOptions="Start"
+                        Text="{x:Static resources:ResViewSettingsMicrosoftToDo.Lbl_Active}"
+                        VerticalOptions="Center" />
+                    <Switch
+                        Grid.Column="1"
+                        HorizontalOptions="End"
+                        IsToggled="{Binding Dc.DcExUserSettings.Data.MsTodoListActive}" />
+                </Grid>
+            </Frame>
+
+
+            <Label
+                Grid.Row="3"
+                Margin="10,10,10,0"
+                HorizontalOptions="Start"
+                Text="{x:Static resources:ResViewSettingsMicrosoftToDo.Lbl_NameOfList}" />
+
+            <Frame
+                Grid.Row="4"
+                Margin="5,10"
+                Padding="10,10,10,0"
+                CornerRadius="10">
+                <Entry
+                    Margin="10,0,10,10"
+                    HorizontalOptions="FillAndExpand"
+                    Text="{Binding Dc.DcExUserSettings.Data.MsTodoListName}" />
+            </Frame>
+
+
+            <Button
+                Grid.Row="6"
+                Margin="10"
+                Command="{Binding CmdSave}"
+                HorizontalOptions="Center"
+                Text="{Binding CmdSave.DisplayName}"
+                VerticalOptions="End" />
+
+        </Grid>
+
+
+        <controls:Header Grid.Row="0" ShowBack="True" />
+
+        <!--<controls:Footer
+            Grid.Row="5" />-->
+    </Grid>
+
+
+
+
+</view:BissContentPage>

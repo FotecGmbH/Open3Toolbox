@@ -1,0 +1,380 @@
+﻿@using ExConfigExchange.Services.Interfaces;
+@using ExConfigExchange.Models
+@using ExConfigExchange.Models.Interfaces
+@using ExConfigExchange.Services
+@using System.Text.RegularExpressions
+@using Biss.Serialize
+@using System.Collections.Specialized
+@using Exchange.Resources.ResConfigurationTool
+@using AdminWebApp.Client.Extensions
+
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+@implements IExConfigVisitor<RenderFragment>
+@inherits ProjectRazorPage<BaseApp.ViewModel.ConfigurationTool.VmConfigItemBlazorUIVisitor>
+
+@*Could be in Renderers *@
+
+@this.ToRender.Accept(this)
+
+@code {
+    private string baseClasses;
+    private ExCollectionConfigItemTemplateVisitor collectionTemplateVisitor;
+    private ExConfigItemValidationVisitor validationVisitor;
+
+    protected override Task OnInitializedAsync()
+    {
+        this.collectionTemplateVisitor = new ExCollectionConfigItemTemplateVisitor(this.HandleImplementationSelection);
+        this.validationVisitor = new ExConfigItemValidationVisitor();
+        this.baseClasses = "m-2 form-group";
+        return base.OnInitializedAsync();
+    }
+
+    [Parameter]
+    public IExConfigItem ToRender { get; set; }
+
+    /// <summary>
+    /// Needed for validation
+    /// </summary>
+    [Parameter]
+    public Action ValidateCallBack { get; set; }
+
+    public RenderFragment Visit(ExStringConfigItem exStringConfigItem, Func<RenderFragment> optionalCall = null) => exStringConfigItem.Hidden ? null :
+    @<div class="@this.baseClasses">
+        @this.GetBasicHeader(exStringConfigItem, optionalCall)
+        @{ var validator = string.IsNullOrWhiteSpace(exStringConfigItem.RegexPattern) ? null : new Regex(exStringConfigItem.RegexPattern);}
+        @this.RenderValidatedStringInputField(
+            () => exStringConfigItem.Value ?? string.Empty,
+            v =>
+            {
+                exStringConfigItem.Valid = validator is null ? true : validator.IsMatch(v);
+                exStringConfigItem.Value = v;
+                this.ValidateCallBack?.Invoke();
+            },
+            _ => validator is null ? false : !exStringConfigItem.Valid,
+            exStringConfigItem.ReadOnly)
+    </div>;
+
+public RenderFragment Visit(ExUrlConfigItem exUrlConfigItem, Func<RenderFragment> optionalCall = null) => exUrlConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exUrlConfigItem, optionalCall)
+    @(this.RenderValidatedStringInputField(
+        () => exUrlConfigItem.Value?.ToString() ?? string.Empty,
+        v =>
+        {
+            exUrlConfigItem.Valid = Uri.IsWellFormedUriString(v, UriKind.Absolute);
+            if (exUrlConfigItem.Valid)
+                exUrlConfigItem.Value = new Uri(v);
+            this.ValidateCallBack?.Invoke();
+        },
+        v => !exUrlConfigItem.Valid, exUrlConfigItem.ReadOnly))
+</div>;
+
+public RenderFragment Visit(ExByteConfigItem exByteConfigItem, Func<RenderFragment> optionalCall = null) => exByteConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exByteConfigItem, optionalCall)
+    @(this.RenderNumericInputField<byte>(
+        () => exByteConfigItem.Value,
+        v => { exByteConfigItem.Value = v; this.ValidateCallBack?.Invoke();},
+        exByteConfigItem.ReadOnly,
+        0,255,1
+    ))
+
+</div>;
+
+public RenderFragment Visit(ExIntConfigItem exIntConfigItem, Func<RenderFragment> optionalCall = null) => exIntConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exIntConfigItem, optionalCall)
+    @(this.RenderNumericInputField<int>(
+        () => exIntConfigItem.Value,
+        v => { exIntConfigItem.Value = v; this.ValidateCallBack?.Invoke();},
+        exIntConfigItem.ReadOnly,
+        exIntConfigItem.ValidRange is null ? int.MinValue : Convert.ToInt32(exIntConfigItem.ValidRange.Min),
+        exIntConfigItem.ValidRange is null ? int.MaxValue : Convert.ToInt32(exIntConfigItem.ValidRange.Max),
+        exIntConfigItem.ValidRange is null ? 1 : Convert.ToInt32(exIntConfigItem.ValidRange.Step)
+        ))
+</div>;
+
+public RenderFragment Visit(ExLongConfigItem exLongConfigItem, Func<RenderFragment> optionalCall = null) => exLongConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exLongConfigItem, optionalCall)
+    @(this.RenderNumericInputField<long>(
+                () => exLongConfigItem.Value,
+                v => { exLongConfigItem.Value = v; this.ValidateCallBack?.Invoke();},
+                exLongConfigItem.ReadOnly,
+                exLongConfigItem.ValidRange is null ? long.MinValue : Convert.ToInt64(exLongConfigItem.ValidRange.Min),
+                exLongConfigItem.ValidRange is null ? long.MaxValue : Convert.ToInt64(exLongConfigItem.ValidRange.Max),
+                exLongConfigItem.ValidRange is null ? 1 : Convert.ToInt64(exLongConfigItem.ValidRange.Step)
+                ))
+</div>;
+
+public RenderFragment Visit(ExFloatConfigItem exFloatConfigItem, Func<RenderFragment> optionalCall = null) => exFloatConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exFloatConfigItem, optionalCall)
+    @(this.RenderNumericInputField<float>(
+        () => exFloatConfigItem.Value,
+        v => { exFloatConfigItem.Value = v; this.ValidateCallBack?.Invoke();},
+        exFloatConfigItem.ReadOnly,
+        exFloatConfigItem.ValidRange is null ? float.MinValue : Convert.ToSingle(exFloatConfigItem.ValidRange.Min),
+        exFloatConfigItem.ValidRange is null ? float.MaxValue : Convert.ToSingle(exFloatConfigItem.ValidRange.Max),
+        exFloatConfigItem.ValidRange is null ? 1 : Convert.ToSingle(exFloatConfigItem.ValidRange.Step)
+        ))
+</div>;
+
+public RenderFragment Visit(ExDoubleConfigItem exDoubleConfigItem, Func<RenderFragment> optionalCall = null) => exDoubleConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exDoubleConfigItem, optionalCall)
+    @(this.RenderNumericInputField<double>(
+        () => exDoubleConfigItem.Value,
+        v => { exDoubleConfigItem.Value = v; this.ValidateCallBack?.Invoke();},
+        exDoubleConfigItem.ReadOnly,
+        exDoubleConfigItem.ValidRange is null ? double.MinValue : exDoubleConfigItem.ValidRange.Min,
+        exDoubleConfigItem.ValidRange is null ? double.MaxValue : exDoubleConfigItem.ValidRange.Max,
+        exDoubleConfigItem.ValidRange is null ? 1 : exDoubleConfigItem.ValidRange.Step
+        ))
+</div>;
+
+public RenderFragment Visit(ExBoolConfigItem exBoolConfigItem, Func<RenderFragment> optionalCall = null) => exBoolConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exBoolConfigItem, optionalCall)
+    @(this.RenderBooleanInputField(
+        () => exBoolConfigItem.Value,
+        v => exBoolConfigItem.Value = v,
+        exBoolConfigItem.ReadOnly))
+</div>;
+
+public RenderFragment Visit(ExEnumConfigItem exEnumConfigItem, Func<RenderFragment> optionalCall = null) => exEnumConfigItem.Hidden ? null :
+@<div class="@this.baseClasses">
+    @this.GetBasicHeader(exEnumConfigItem, optionalCall)
+    @if (exEnumConfigItem.ReadOnly)
+    {
+        @this.RenderStringInputField(
+            () => this.GetTitle(exEnumConfigItem.Selected),
+            _ => { },
+            exEnumConfigItem.ReadOnly)
+    }
+    else
+    {
+        exEnumConfigItem.Selected = exEnumConfigItem.Selected is null ? exEnumConfigItem.Value.First() : exEnumConfigItem.Selected;
+        Action<ChangeEventArgs> action = e => exEnumConfigItem.Selected = exEnumConfigItem.Value.First(i => Convert.ToInt32(e.Value) == i.Value);
+        <select class="custom-select" @onchange="action">
+            @foreach (var option in exEnumConfigItem.Value)
+            {
+                @if (option.Value == exEnumConfigItem.Selected.Value)
+                {
+                    <option selected value="@exEnumConfigItem.Selected.Value">@this.GetTitle(exEnumConfigItem.Selected)</option>
+                    continue;
+                }
+                <option value="@option.Value">@this.GetTitle(option)</option>
+            }
+        </select>
+    }
+</div>;
+
+public RenderFragment Visit(ExObjectConfigItem exObjectConfigItem, Func<RenderFragment> optionalCall = null) => exObjectConfigItem.Hidden ? null :
+@<div class="card p-2 @this.baseClasses">
+    @if (exObjectConfigItem.IsInterface)
+    {
+        @if (exObjectConfigItem.ReadOnly)
+        {
+            <p class="text-dark">@ResViewCommon.NoPermissionToAssign</p>
+        }
+        else
+        {
+            Action resolveAction = async () =>
+            {
+                var newInstance = await this.HandleImplementationSelection(exObjectConfigItem);
+                if (newInstance is not null)
+                {
+                    bool hadConfigureAs = exObjectConfigItem.HadConfigureAsAttribute;
+                    BissClone.Clone(newInstance, exObjectConfigItem); // Maybe?, Maybe not? (Choose again feature)
+            exObjectConfigItem.HadConfigureAsAttribute = hadConfigureAs;
+                    this.StateHasChanged();
+                    this.ValidateCallBack?.Invoke();
+                }
+            };
+            <button class="btn btn-success"
+                    @onclick="resolveAction">
+                @ResConfigItemBlazorUIVisitor.ButtonText_ChooseImplementation @this.GetTitle(exObjectConfigItem)
+            </button>
+            @if (exObjectConfigItem.ImplementationRequired)
+            {
+                <p class="text-danger mt-2 d-flex flex-row flex-nowrap align-items-center">@ResViewCommon.Error_MustBePicked</p>
+            }
+        }
+    }
+    else
+    {
+        <div class="d-flex flex-row justify-content-between align-items-center flex-nowrap">
+            @if (exObjectConfigItem.DisplayNameKey is null)
+            {
+                <h3>@this.GetTitle(exObjectConfigItem)</h3>
+            }
+            else
+            {
+                <h3>@(string.IsNullOrWhiteSpace(exObjectConfigItem.Value[exObjectConfigItem.DisplayNameKey].ToString()) ? ResViewCommon.Placeholder_Name : exObjectConfigItem.Value[exObjectConfigItem.DisplayNameKey].ToString())-@this.GetTitle(exObjectConfigItem)</h3>
+            }
+            <div class="d-flex flex-row justify-content-between align-items-center flex-nowrap">
+                @optionalCall?.Invoke()
+
+                @if (exObjectConfigItem.Value.Count(v => v.Value is not null) > 0)
+                {
+                    Action collapseAction = () => exObjectConfigItem.ContentCollapsed = !exObjectConfigItem.ContentCollapsed;
+                    <button class="btn btn-outline-primary m-1" @onclick=collapseAction>
+                        @if (!exObjectConfigItem.ContentCollapsed)
+                        {
+                            @IconProvider.RenderExitFullScreenIcon()
+                        }
+                        else
+                        {
+                            @IconProvider.RenderFullScreenIcon()
+                        }
+                    </button>
+                }
+            </div>
+        </div>
+        <div hidden="@(exObjectConfigItem.ContentCollapsed)">
+            @foreach (var f in exObjectConfigItem.Value.Values)
+            {
+                if (f is null)
+                    continue;
+
+                @f.Accept(this)
+            }
+        </div>
+    }
+</div>;
+
+public RenderFragment Visit(ExCollectionConfigItem exCollectionConfigItem, Func<RenderFragment> optionalCall = null) => exCollectionConfigItem.Hidden ? null :
+@<div class="card p-2 @this.baseClasses">
+    <div class="d-flex flex-row justify-content-between align-items-center flex-nowrap">
+        <h3>@this.GetTitle(exCollectionConfigItem)</h3>
+        <div>
+            @if (!exCollectionConfigItem.ReadOnly)
+            {
+                Action action = async () =>
+                    {
+                        var toAdd = await exCollectionConfigItem.ItemTemplate.Accept(this.collectionTemplateVisitor);
+                        if (toAdd is not null)
+                            exCollectionConfigItem.Value.Add(toAdd);
+                        this.StateHasChanged();
+                        this.ValidateCallBack?.Invoke();
+                    };
+                <button class="btn btn-success mx-2" @onclick="action">@IconProvider.RenderFilledPlusIcon()</button>
+            }
+            @optionalCall?.Invoke()
+
+            @if (exCollectionConfigItem.Value.Count(v => v is not null) > 0)
+            {
+                Action collapseAction = () => exCollectionConfigItem.ContentCollapsed = !exCollectionConfigItem.ContentCollapsed;
+                <button class="btn btn-outline-primary" @onclick=collapseAction>
+                    @if (!exCollectionConfigItem.ContentCollapsed)
+                    {
+                        @IconProvider.RenderExitFullScreenIcon()
+                    }
+                    else
+                    {
+                        @IconProvider.RenderFullScreenIcon()
+                    }
+                </button>
+            }
+        </div>
+    </div>
+    <div hidden="@(exCollectionConfigItem.ContentCollapsed)">
+        @foreach (var item in exCollectionConfigItem.Value)
+        {
+            if (item is null)
+                continue;
+
+            @item.Accept(this, () => this.GetDeleteButton(() => exCollectionConfigItem.Value.Remove(item)))
+        }
+    </div>
+</div>;
+
+private string GetTitle(IExConfigItem field)
+{
+return field.DisplayKey; // Later this could call a Resolver 
+}
+
+private string GetTitle(ExEnumItemConfigItem field)
+{
+return field.DisplayKey; // Later this could call a Resolver
+}
+
+private RenderFragment GetBasicHeader(IExConfigItem field, Func<RenderFragment> optionalCall) =>
+@<div class="d-flex flex-row justify-content-between align-items-center flex-nowrap">
+    <label>@this.GetTitle(field)</label>
+    @optionalCall?.Invoke()
+</div>;
+
+private RenderFragment GetDeleteButton(Action removeAction) =>
+@<button class="btn btn-danger m-1" @onclick="removeAction">
+    @IconProvider.RenderDeleteIcon()
+</button>;
+
+private RenderFragment RenderStringInputField(Func<string> getter, Action<string> setter, bool readOnly) =>
+@<div>
+    @{Action<ChangeEventArgs> action = e => setter((string)e.Value);}
+    <input type="text" class="form-control" value="@(getter())" @onchange="action" disabled="@readOnly" />
+</div>;
+
+private RenderFragment RenderValidatedStringInputField(Func<string> getter, Action<string> setter, Func<string, bool> validator, bool readOnly, string warningPostFix = "") =>
+@<div>
+    @{Action<ChangeEventArgs> action = e => setter((string)e.Value);}
+    <input type="text" class="form-control" value="@(getter())" @onchange="action" disabled="@readOnly" />
+    @if (validator(getter()))
+    {
+        <p class="text-danger mt-2 d-flex flex-row flex-nowrap align-items-center">@IconProvider.RenderDangerIcon()<span class="mx-1"/>@ResViewCommon.Error_InvalidInput@warningPostFix</p>
+    }
+</div>;
+
+private RenderFragment RenderNumericInputField<TNum>(Func<TNum> getter, Action<TNum> setter, bool readOnly, TNum min, TNum max, TNum step) where TNum : struct =>
+@<div>
+    @{Action<ChangeEventArgs> action = e => setter((TNum)Convert.ChangeType(e.Value, typeof(TNum)));}
+    <input type="number" class="form-control" value="@(getter())" @onchange="action" disabled="@readOnly" min="@min" max="@max" step="@step" />
+    @if (!this.validationVisitor.ValueInValidRange(Convert.ToDouble(getter()), new ExRange(Convert.ToDouble(min), Convert.ToDouble(max), Convert.ToDouble(step))))
+    {
+        <p class="text-danger mt-2 d-flex flex-row flex-nowrap align-items-center">@IconProvider.RenderDangerIcon()<span class="mx-1" />@ResViewCommon.Error_InvalidInput @($"({min} <-> {max}) +- {step}")</p>
+    }
+</div>;
+
+private RenderFragment RenderBooleanInputField(Func<bool> getter, Action<bool> setter, bool readOnly) =>
+@<div>
+    @{Action<ChangeEventArgs> action = e => setter((bool)e.Value);}
+    <input class="custom-control-input" type="checkbox" value="@(getter())" @onchange="action" disabled="@readOnly" />
+</div>;
+
+private async Task<ExObjectConfigItem> GetOption(List<ExObjectConfigItem> options)
+{
+if (options.Count == 0)
+{
+  // Should not happen
+  return null;
+}
+if (options.Count == 1)
+{
+  return BissDeserialize.FromJson<ExObjectConfigItem>(options.First().ToJson());
+}
+else
+{
+  var selectedName = (string)await this.DialogService.OpenAsync(ResViewCommon.PromptTitle_Choose, ds => @<PickerDialogComponent DialogService="ds" Keys="options.Select(o => this.GetTitle(o)).ToList()" />);
+if (selectedName is null)
+return null;
+return BissDeserialize.FromJson<ExObjectConfigItem>(options.First(o => this.GetTitle(o) == selectedName).ToJson());
+}
+}
+
+private async Task<ExObjectConfigItem> HandleImplementationSelection(ExObjectConfigItem item)
+{
+await ViewModel.Dc.DcExImplementationTemplates.WaitDataFromServerAsync(filter: item.InterfaceTypeName);
+var options = ViewModel.Dc.DcExImplementationTemplates.Select(d => d.Data).Where(d => d.InterfaceTypeName == item.InterfaceTypeName).ToList();
+if (options.Count == 0)
+{
+this.NotificationService.NotifyOfFailure(ResConfigItemBlazorUIVisitor.NotificationTitel_NoImplementationAvailable, ResConfigItemBlazorUIVisitor.NotificationMsg_NoImplementationAvailable);
+return null;
+}
+var choosen = await this.GetOption(options);
+return choosen;
+}
+}

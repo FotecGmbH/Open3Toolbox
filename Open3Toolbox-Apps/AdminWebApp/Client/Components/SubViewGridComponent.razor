@@ -1,0 +1,55 @@
+﻿@using Biss.Apps.ViewModel  
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Resources.ResStatistics 
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        @foreach (var subView in this.SubViews)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-xl-3 card m-2">
+                <div class="container-fluid">
+                    <div class="row my-2 justify-content-center">
+                        <div class="col-xl mb-2">
+                            <h1 class="text-center">@subView.Name</h1>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        @{Action action = () => this.CmdVisit.Execute(subView); }
+                        <button class="col-xl btn btn-primary"
+                                @onclick="action"
+                                disabled="@(!this.CmdVisit.CanExecuteProperty)">
+                            <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                                @IconProvider.RenderEyeIcon()
+                                <span class="mx-1" />
+                                @ResViewCommon.Cmd_Visit
+                            </span>
+                        </button>
+                    </div>
+                    <div class="row my-2">
+                        @{Action dispose = () => this.CmdDelete.Execute(subView); }
+                        <button class="col-xl btn btn-danger"
+                                @onclick="dispose"
+                                disabled="@(!this.CmdDelete.CanExecuteProperty)">
+                            <span class="d-flex flex-row flex-nowrap justify-content-center align-items-center">
+                                @IconProvider.RenderDeleteIcon()
+                                <span class="mx-1" />
+                                @ResViewCommon.Cmd_Delete
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<IVmSubView> SubViews { get; set; }
+
+    [Parameter]
+    public VmCommand CmdVisit { get; set; }
+
+    [Parameter]
+    public VmCommand CmdDelete { get; set; }
+}

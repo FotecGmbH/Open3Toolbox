@@ -1,0 +1,75 @@
+﻿@page "/sensorstatistics/measurement/history"
+@page "/sensorstatistics/measurement/history/{Id:int}"
+
+@using AdminWebApp.Client.Components
+@using BaseApp.ViewModel.Statistics
+@using BaseApp.ViewModel.Statistics.Interfaces
+@using Exchange.Model.Statistics
+@using Exchange.Resources.ResStatistics 
+
+@inherits ProjectRazorPage<VmMeasurementHistory>
+
+<MessageBoxControl Item="@MessageBox"></MessageBoxControl>
+<BusyIndicatorControl IsBusy="@ViewModel.IsBusy" BusyContent="@ViewModel.BusyContent"></BusyIndicatorControl>
+<ToastControl Item="@Toast"></ToastControl>
+
+<CardContainer Title="@ResViewMeasurementHistory.Title">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-xl p-0">
+                <div class="d-flex flex-row flex-nowrap">
+                    <button class="btn btn-dark my-2" @onclick="@(() => this.ViewModel.CmdGoBack.Execute(null))">@IconProvider.RenderBackArrow(2, 2)</button>
+                    @*<BreadCrumbsComponent Class="mt-3 mr-3 w-100" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Id</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Index</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Name</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Data.Name</h5>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap my-2">
+            <h3>@ResViewCommon.Field_Description</h3>
+            <h5>@this.ViewModel.MeasurementDetails.Data.Description</h5>
+        </div>
+        <div class="row">
+            <div class="col-xl">
+                <RadzenChart>
+                    @*Lines*@
+                    <RadzenLineSeries Data="@this.ViewModel.History" CategoryProperty="@nameof(ExMeasurementData.TimeStamp)" Title="Value" LineType="LineType.Solid" ValueProperty="@nameof(ExMeasurementData.Value)">
+                        <RadzenMarkers MarkerType="MarkerType.Circle" />
+                    </RadzenLineSeries>
+
+                    <RadzenLineSeries Data="@this.ViewModel.History" CategoryProperty="@nameof(ExMeasurementData.TimeStamp)" Title="Longitude" LineType="LineType.Dotted" ValueProperty="@nameof(ExMeasurementData.Longitude)">
+                        <RadzenMarkers MarkerType="MarkerType.Square" />
+                    </RadzenLineSeries>
+                    <RadzenLineSeries Data="@this.ViewModel.History" CategoryProperty="@nameof(ExMeasurementData.TimeStamp)" Title="Latitude" LineType="LineType.Dotted" ValueProperty="@nameof(ExMeasurementData.Latitude)">
+                        <RadzenMarkers MarkerType="MarkerType.Diamond" />
+                    </RadzenLineSeries>
+                    <RadzenLineSeries Data="@this.ViewModel.History" CategoryProperty="@nameof(ExMeasurementData.TimeStamp)" Title="Altitude" LineType="LineType.Dotted" ValueProperty="@nameof(ExMeasurementData.Altitude)">
+                        <RadzenMarkers MarkerType="MarkerType.Triangle" />
+                    </RadzenLineSeries>
+
+                    @*Axis*@
+                    <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}" />
+                </RadzenChart>
+            </div>
+        </div>
+        <div class="row d-flex flex-column flex-nowrap mt-2 mb-1 mx-2 justify-content-start">
+            <button class="btn btn-primary"
+                    @onclick="() => this.ViewModel.CmdRefreshData.Execute(null)">
+                <span class="d-flex flex-row flex-nowrap align-items-center">
+                    @IconProvider.RenderRefreshIcon()
+                    <span class="mx-1" />
+                    @this.ViewModel.CmdRefreshData.DisplayName
+                </span>
+            </button>
+        </div>
+    </div>
+</CardContainer>
+
+@code {
+}

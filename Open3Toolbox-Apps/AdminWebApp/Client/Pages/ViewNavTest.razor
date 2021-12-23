@@ -1,0 +1,32 @@
+﻿@page "/navtest"
+@page "/navtest/{Id:int}"
+
+@inherits ProjectRazorPage<VmNavTest>
+
+<div>
+    <h1>@ViewModel.PageTitle</h1>
+
+    <h3>@ViewModel.PageSubTitle</h3>
+</div>
+
+<div>
+    <input @bind="@ViewModel.MyText" @bind:event="oninput" />
+
+    <button class="btn btn-primary" type="button"
+            @onclick="@ViewModel.CmdOk.Execute"
+            disabled="@ViewModel.CmdOk.Disabled">
+        @ViewModel.CmdOk.DisplayName
+    </button>
+
+    <button class="btn btn-primary" type="button"
+            @onclick="@ViewModel.CmdBack.Execute"
+            disabled="@ViewModel.CmdBack.Disabled">
+        @ViewModel.CmdBack.DisplayName
+    </button>
+
+</div>
+
+
+@code {
+
+}

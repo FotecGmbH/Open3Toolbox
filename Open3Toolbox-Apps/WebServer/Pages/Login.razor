@@ -1,0 +1,55 @@
+﻿@page "/login"
+
+@using WebServer.Models
+
+@inject NavigationManager NavigationManager
+@inject LoginModel User
+@inject IJSRuntime JsRuntime
+
+<div class="card">
+    <h4 class="card-header">Login</h4>
+    <div class="card-body">
+        <EditForm Model="@User" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label>Username</label>
+                <InputText @bind-Value="User.Username" class="form-control" />
+                <ValidationMessage For="@(() => User.Username)" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <InputText @bind-Value="User.Password" type="password" class="form-control" />
+                <ValidationMessage For="@(() => User.Password)" />
+            </div>
+            <button disabled="@_loading" class="btn btn-primary">
+                @if (_loading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                Login
+            </button>
+        </EditForm>
+    </div>
+</div>
+
+    
+
+@code {
+
+    private bool _loading;
+
+    private async void OnValidSubmit()
+    {
+        _loading = true;
+
+        User.IsLoggedIn = User.Username.ToLower() == "admin" && User.Password == "default";
+
+        User.Username = string.Empty;
+        User.Password = string.Empty;
+
+        _loading = false;
+
+        if (User.IsLoggedIn) NavigationManager.NavigateTo("/");
+        else await JsRuntime.InvokeVoidAsync("JsAlert", "Wrong username or password!");
+    }
+}
